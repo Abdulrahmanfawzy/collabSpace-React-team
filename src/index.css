@@ -6,7 +6,87 @@
 
 
 @theme {
+  /* primary */
+  --color-primary-blue-50 :#E6EFFF;
+  --color-primary-blue-100:#B0CCFE ;
+  --color-primary-blue-200: #8AB3FD;
+  --color-primary-blue-300:#5490FC ;
+  --color-primary-blue-400: #337BFC;
+  --color-primary-blue-500: #005AFB;
+  --color-primary-blue-600:#0052E4 ;
+  --color-primary-blue-700:#0040B2 ;
+  --color-primary-blue-800: #00328A;
+  --color-primary-blue-900:#002669 ;
+
+/* secondary */
+
+ --color-secondary-gray-50:#E9E9EA ;
+  --color-secondary-gray-100:#BCBCBD;
+  --color-secondary-gray-200:#9C9C9D ;
+  --color-secondary-gray-300:#6E6E71 ;
+  --color-secondary-gray-400:#525255 ;
+  --color-secondary-gray-500:#27272B ;
+  --color-secondary-gray-600:#232327 ;
+  --color-secondary-gray-700:#1C1C1F;
+  --color-secondary-gray-800: #151518;
+  --color-secondary-gray-900: #101012;
+
+/* support */
+
+--color-support-danger:#AF2622;
+--color-support-success:#228425;
+--color-support-warning:#CCA60C;
+--color-support-purple:#6837A4;
+--color-support-pink:#C8225E;
+--color-support-dark-pink:#A43782;
+
   --color-blue-900: #014162;
+
+    /* Font family */
+
+    --font-inter: "Inter", sans-serif;
+    --text-h1:61px;
+    --text-h1--line-height: 1.5;
+  --text-h1--font-weight: 600;
+
+  --text-h2: 49px;
+  --text-h2--line-height: 1.5;
+  --text-h2--font-weight: 600;
+ 
+  --text-h3: 39px;
+  --text-h3--line-height: 1.5;
+  --text-h3--font-weight: 600;
+
+  --text-h4: 31px;
+  --text-h4--line-height: 1.5;
+  --text-h4--font-weight: 600;
+
+  --text-h5: 25px;
+  --text-h5--line-height: 1.5;
+  --text-h5--font-weight: 500;
+
+  --text-h6: 20px;
+  --text-h6--line-height: 1.5;
+  --text-h6--font-weight: 500;
+
+  --text-body: 16px;
+  --text-body--line-height: 1.5;
+  --text-body--font-weight: 400;
+
+  --text-small: 14px;
+  --text-small--line-height: 1.5;
+  --text-small--font-weight: 400;
+
+  --text-caption: 13px;
+  --text-caption--line-height: 1.5;
+  --text-caption--font-weight: 400;
+  
+  --text-caption-small: 12px;
+  --text-caption-small--line-height: 1.5;
+  --text-caption-small--font-weight: 400;
+
+  /*border radius */
+  --radius-base: 16px;
 }
 
 @custom-variant dark (&:is(.dark *));

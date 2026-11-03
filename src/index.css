@@ -42,6 +42,8 @@
 
   --color-blue-900: #014162;
 
+  /* background */
+  --color-background-main: #F6F8FA;
     /* Font family */
 
     --font-inter: "Inter", sans-serif;
@@ -235,5 +237,5 @@
 }
 body {
   font-family: "Inter", sans-serif;
-  background-color: #fff;
+  background-color: var(--color-background-main);
 }

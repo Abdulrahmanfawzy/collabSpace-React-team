@@ -20,3 +20,28 @@ export interface Project {
   filesCount: number
   teams: Member[]
 }
+
+export interface ProjectDetails extends Project {
+  description: string
+  progress: number
+  projectType: string
+  totalTasks: number
+}
+
+export interface TeamMember extends Member {
+  isLeader?: boolean
+}
+
+
+export interface ChartPoint {
+  month: string
+  value: number
+}
+
+export interface ProjectProgress {
+  percent: number
+  pending: number
+  inProgress: number
+  completed: number
+  total: number
+}

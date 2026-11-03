@@ -4,6 +4,9 @@
 /* getting error here */
 @import "tw-animate-css";
 
+/* Rubik Font  */
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap");
+
 
 @theme {
   /* primary */
@@ -20,7 +23,7 @@
 
 /* secondary */
 
- --color-secondary-gray-50:#E9E9EA ;
+  --color-secondary-gray-50:#E9E9EA ;
   --color-secondary-gray-100:#BCBCBD;
   --color-secondary-gray-200:#9C9C9D ;
   --color-secondary-gray-300:#6E6E71 ;
@@ -30,9 +33,10 @@
   --color-secondary-gray-700:#1C1C1F;
   --color-secondary-gray-800: #151518;
   --color-secondary-gray-900: #101012;
+   --color-text-secondary:#4A4A4A;
+
 
 /* support */
-
 --color-support-danger:#AF2622;
 --color-support-success:#228425;
 --color-support-warning:#CCA60C;
@@ -42,6 +46,8 @@
 
   --color-blue-900: #014162;
 
+  /* background */
+  --color-background-main: #F6F8FA;
     /* Font family */
 
     --font-inter: "Inter", sans-serif;
@@ -87,6 +93,16 @@
 
   /*border radius */
   --radius-base: 16px;
+  --radius-pill: 100px;
+
+  --background-image-navbar-shadow: linear-gradient(
+    180deg,
+    rgba(9, 30, 66, 0.13) 0%,
+    rgba(9, 30, 66, 0.13) 25%,
+    rgba(9, 30, 66, 0.08) 25.01%,
+    rgba(9, 30, 66, 0) 100%
+  );
+  
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -235,5 +251,5 @@
 }
 body {
   font-family: "Inter", sans-serif;
-  background-color: #fff;
+  background-color: var(--color-background-main);
 }

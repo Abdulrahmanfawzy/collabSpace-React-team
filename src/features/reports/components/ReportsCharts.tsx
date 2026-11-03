@@ -86,15 +86,16 @@ const ProjectsProgressChart = () => {
           Projects Progress
         </h2>
 
-        <select
-          aria-label="Filter projects"
-          className="cursor-pointer rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:border-primary-blue-500"
-          defaultValue="all"
-        >
-          <option value="all">All Projects</option>
-          <option value="active">Active Projects</option>
-          <option value="completed">Completed Projects</option>
-        </select>
+      
+  <select
+    aria-label="Filter projects"
+    className="cursor-pointer text-sm outline-none "
+    defaultValue="all"
+  >
+    <option value="all">All Projects</option>
+    <option value="active">Active Projects</option>
+    <option value="completed">Completed Projects</option>
+  </select>
       </div>
 
       <div className="mt-8 h-65 w-full">
@@ -170,7 +171,7 @@ const WorkerActivityChart = () => {
 
         <select
           aria-label="Activity period"
-          className="cursor-pointer rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:border-primary-blue-500"
+          className="cursor-pointer px-3 py-2 text-sm outline-none"
           defaultValue="monthly"
         >
           <option value="monthly">Monthly</option>
@@ -220,15 +221,9 @@ const WorkerActivityChart = () => {
     </div>
   );
 };
-
-const ReportsCharts = () => {
-  return (
-    <>
-      <TaskCompletionChart />
-      <ProjectsProgressChart />
-      <WorkerActivityChart />
-    </>
-  );
+export {
+  TaskCompletionChart,
+  ProjectsProgressChart,
+  WorkerActivityChart,
 };
 
-export default ReportsCharts;

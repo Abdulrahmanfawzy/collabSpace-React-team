@@ -18,7 +18,7 @@ export function TeamMembersCard({ members }: TeamMembersCardProps) {
   return (
     <Card className="rounded-base">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-small font-semibold">Team Members</CardTitle>
+        <CardTitle className="text-h6 font-semibold">Team Members</CardTitle>
 
         <Select defaultValue="ui-ux">
           <SelectTrigger className="h-8 w-28 border-0 shadow-none">

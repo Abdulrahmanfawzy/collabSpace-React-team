@@ -43,9 +43,9 @@ export const projectDetailsMock: ProjectDetails = {
   teams: [],
   description:
     "This project focuses on organizing tasks, tracking progress, and coordinating team efforts to ensure timely delivery and clear visibility across all project activities.",
-  progress: 42,
+  progress: 78,
   projectType: "SaaS",
-  totalTasks: 140,
+  totalTasks: 94,
 }
 
 

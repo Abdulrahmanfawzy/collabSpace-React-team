@@ -13,16 +13,16 @@ export function TaskCard({ task }: TaskCardProps) {
 
   return (
     <article className="flex flex-col gap-3 rounded-base border border-secondary-gray-50 bg-white p-3">
-      {/* 1. العنوان + الأولوية */}
+      
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-small font-semibold">{title}</h3>
         <PriorityBadge priority={priority} />
       </div>
 
-      {/* 2. الوصف */}
+     
       <p className="text-caption text-secondary-gray-300">{description}</p>
 
-      {/* 3. شريط التقدم (اختياري) */}
+    
       {progress !== undefined && (
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-caption text-secondary-gray-300">
@@ -33,7 +33,7 @@ export function TaskCard({ task }: TaskCardProps) {
         </div>
       )}
 
-      {/* 4. الـ Reviewer (اختياري) */}
+     
       {reviewer && (
         <div className="flex items-center justify-between text-caption">
           <span className="flex items-center gap-2">
@@ -44,7 +44,7 @@ export function TaskCard({ task }: TaskCardProps) {
         </div>
       )}
 
-      {/* 5. الصور + التعليقات + التاريخ */}
+      
       <div className="flex items-center justify-between">
         <AvatarGroup members={members} />
 

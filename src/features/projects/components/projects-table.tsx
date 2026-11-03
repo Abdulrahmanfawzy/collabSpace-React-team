@@ -10,7 +10,7 @@ import {
 import { AvatarGroup } from "@/components/common/avatar-group"
 import { PriorityText, StatusText } from "./project-status"
 import type { Project, ProjectColor } from "../types/project.types"
-
+import { Link } from "react-router-dom";
 
 const iconStyles: Record<ProjectColor, string> = {
   purple: "bg-support-purple/10 text-support-purple",
@@ -49,7 +49,11 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                 >
                   <Briefcase size={16}  />
                 </span>
+              <Link
+              to={`/projects/${project.id}`}
+                className=" cursor-pointer">
                 {project.name}
+                </Link>
               </span>
             </TableCell>
             <TableCell>{project.startDate}</TableCell>

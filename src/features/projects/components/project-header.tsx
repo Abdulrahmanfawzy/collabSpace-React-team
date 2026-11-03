@@ -16,7 +16,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
           Projects &gt; <span className="text-secondary-gray-700">{name}</span>
         </p>
         <div className="flex items-center gap-3">
-          <h1 className="text-h1 font-semibold">{name}</h1>
+          <h1 className="text-h4 font-semibold">{name}</h1>
           <Badge variant="low">{progress}% Completed</Badge>
         </div>
       </div>

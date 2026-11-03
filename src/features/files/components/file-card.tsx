@@ -2,7 +2,7 @@ import { Download, File, FileText, Image } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import type { FileItem, FileType } from "../types/file.types"
 
-// أيقونة ولون كل نوع ملف (ألوان مؤقتة، نظبطها في الآخر)
+
 const fileTypeStyles: Record<FileType, { icon: LucideIcon; className: string }> = {
   pdf: { icon: FileText, className: "bg-support-danger/10 text-support-danger" },
   doc: { icon: File, className: "bg-primary-blue-50 text-primary-blue-500" },
@@ -19,12 +19,12 @@ export function FileCard({ file }: FileCardProps) {
 
   return (
     <article className="flex items-center gap-3 rounded-base border border-secondary-gray-100 bg-white p-4">
-      {/* أيقونة الملف */}
+     
       <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${className}`}>
         <Icon size={20} />
       </span>
 
-      {/* البيانات */}
+     
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <h3 className="truncate text-small font-semibold">{name}</h3>
         <p className="text-caption text-secondary-gray-500">By {uploadedBy}</p>
@@ -33,7 +33,7 @@ export function FileCard({ file }: FileCardProps) {
         </p>
       </div>
 
-      {/* زرار التحميل */}
+      
       <button
         type="button"
         aria-label={`Download ${name}`}

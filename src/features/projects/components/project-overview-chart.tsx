@@ -17,7 +17,7 @@ export function ProjectOverviewChart({ data }: ProjectOverviewChartProps) {
   return (
     <Card className="rounded-base">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-small font-semibold">Project overview</CardTitle>
+        <CardTitle className="text-h6 font-semibold">Project overview</CardTitle>
 
         <div className="flex gap-2">
           <Select defaultValue="all">

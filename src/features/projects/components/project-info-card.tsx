@@ -31,7 +31,7 @@ export function ProjectInfoCard({ project }: ProjectInfoCardProps) {
   return (
     <Card className="rounded-base">
       <CardHeader>
-        <CardTitle className="text-small font-semibold">Product Details</CardTitle>
+        <CardTitle className="text-h6 font-semibold">Product Details</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-6 sm:grid-cols-3">
         <InfoItem icon={Briefcase} label="Project Type" value={project.projectType} />

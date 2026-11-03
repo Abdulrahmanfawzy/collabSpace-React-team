@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button"
 import { TaskCard } from "./task-card"
 import type { Task, TaskStatus } from "../types/task.types"
 
-// لون هيدر كل عمود (مؤقت من الألوان اللي عندك، نظبطه في الآخر)
+
 const headerStyles: Record<TaskStatus, string> = {
-  todo: "bg-secondary-gray-50",
+  todo: "bg-secondary-gray-50/50",
   "in-progress": "bg-primary-blue-50",
   "in-review": "bg-support-pink/10",
   completed: "bg-support-success/10",
@@ -19,8 +19,9 @@ interface TaskColumnProps {
 
 export function TaskColumn({ title, status, tasks }: TaskColumnProps) {
   return (
-    <section className="flex min-w-[260px] flex-1 flex-col overflow-hidden rounded-base border border-secondary-gray-50 bg-white">
-      {/* 1. الهيدر */}
+    <section className="flex min-w-65 flex-1 flex-col overflow-hidden rounded-base border border-secondary-gray-50 bg-white">
+      
+
       <header className={`flex items-center justify-between px-3 py-2 ${headerStyles[status]}`}>
         <h2 className="text-caption font-medium">{title}</h2>
         <button type="button" aria-label="Column options">
@@ -29,7 +30,7 @@ export function TaskColumn({ title, status, tasks }: TaskColumnProps) {
       </header>
 
       <div className="flex flex-col gap-3 p-3">
-        {/* 2. زرار Add Task */}
+        
         <Button
           variant="outline"
           className="w-full rounded-full border-dashed border-primary-blue-500 text-primary-blue-500"
@@ -37,7 +38,7 @@ export function TaskColumn({ title, status, tasks }: TaskColumnProps) {
           Add Task <Plus size={14} />
         </Button>
 
-        {/* 3. الكروت */}
+       
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}

@@ -27,25 +27,25 @@ interface ProjectProgressCardProps {
 export function ProjectProgressCard({ progress }: ProjectProgressCardProps) {
   const { percent, pending, inProgress, completed, total } = progress
 
-  // الدايرة: جزء مكتمل + جزء فاضي
+
   const gaugeData = [
     { name: "done", value: percent },
     { name: "left", value: 100 - percent },
   ]
 
-  // زاوية العقرب: من -90 (أقصى الشمال) لـ +90 (أقصى اليمين)
+
   const needleAngle = (percent / 100) * 180 - 90
 
   return (
     <Card className="rounded-base">
       <CardHeader>
-        <CardTitle className="text-small font-semibold">Project Progress</CardTitle>
+        <CardTitle className="text-h6 font-semibold">Project Progress</CardTitle>
       </CardHeader>
 
       <CardContent className="flex flex-col items-center gap-6">
-        {/* العداد */}
+        {/* counter*/}
         <div className="flex flex-col items-center gap-2">
-          <div className="relative h-[130px] w-[240px]">
+          <div className="relative h-32.5 w-60">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -67,7 +67,7 @@ export function ProjectProgressCard({ progress }: ProjectProgressCardProps) {
 
             {/* العقرب */}
             <div
-              className="absolute bottom-0 left-1/2 h-[85px] w-0.5 origin-bottom rounded-full bg-secondary-gray-700"
+              className="absolute bottom-0 left-1/2 h-22 w-2 origin-bottom rounded-full bg-secondary-gray-700"
               style={{ transform: `translateX(-50%) rotate(${needleAngle}deg)` }}
             />
             <div className="absolute bottom-0 left-1/2 h-3 w-3 -translate-x-1/2 translate-y-1/2 rounded-full border-2 border-secondary-gray-700 bg-white" />
@@ -79,7 +79,7 @@ export function ProjectProgressCard({ progress }: ProjectProgressCardProps) {
           </div>
         </div>
 
-        {/* الأرقام التلاتة */}
+      
         <div className="flex w-full justify-around">
           <Stat
             dotClassName="bg-secondary-gray-100"

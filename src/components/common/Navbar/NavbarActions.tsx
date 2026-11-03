@@ -1,6 +1,6 @@
+import SearchInput from "../SearchInput";
+import avtar from "../../../assets/images/profile-avtar.svg";
 import { Bell } from "lucide-react";
-import SearchInput from "./SearchInput";
-import avtar from "../../../assets/icons/profile-avtar.svg";
 
 const NavbarActions = () => {
   return (
@@ -9,18 +9,18 @@ const NavbarActions = () => {
         <SearchInput />
 
         <button className="relative cursor-pointer">
-            <Bell className="size-6 text-black w-{18px] h-[20px]" />
+            <Bell  className=" w-4.5 h-5 "/>
 
-            <span className="absolute right-0 top-0 size-2 rounded-full bg-[#DC1500] w-[7px] h-[7px]" />
+            <span className="absolute right-0 top-0 size-2 rounded-full bg-support-danger w-1.75 h-1.75 " />
         </button>
 
         <div className="flex items-center gap-2">
-            <h3 className="flex flex-col whitespace-nowrap font-medium text-caption-small items-end">
+            <p className="flex flex-col whitespace-nowrap font-medium text-caption-small items-end">
                 Mohamed Salah
-                <span className="text-[#4A4A4A] font-normal">
+                <span className="text-text-secondary/80 font-medium">
                     UI/UX
                 </span>
-            </h3>
+            </p>
 
             <img src={avtar} alt="profile avtar" />
         </div>

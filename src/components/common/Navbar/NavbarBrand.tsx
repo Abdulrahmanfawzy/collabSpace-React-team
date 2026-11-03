@@ -1,4 +1,3 @@
-
 const NavbarBrand = () => {
   return (
     <span className="text-h6 font-normal" >

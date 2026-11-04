@@ -6,10 +6,10 @@ import {toast} from "sonner";
 
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import AuthDivider from "@/components/layout/AuthDivider";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Checkbox } from "@/components/ui/Checkbox";
-import { Label } from "@/components/ui/Label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const SignInPage = () => {
   const navigate = useNavigate();

@@ -1,0 +1,48 @@
+import { EllipsisVertical, Plus } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { TaskCard } from "./task-card"
+import type { Task, TaskStatus } from "../types/task.types"
+
+
+const headerStyles: Record<TaskStatus, string> = {
+  todo: "bg-secondary-gray-50/50",
+  "in-progress": "bg-primary-blue-50",
+  "in-review": "bg-support-pink/10",
+  completed: "bg-support-success/10",
+}
+
+interface TaskColumnProps {
+  title: string
+  status: TaskStatus
+  tasks: Task[]
+}
+
+export function TaskColumn({ title, status, tasks }: TaskColumnProps) {
+  return (
+    <section className="flex min-w-65 flex-1 flex-col overflow-hidden rounded-base border border-secondary-gray-50 bg-white">
+      
+
+      <header className={`flex items-center justify-between px-3 py-2 ${headerStyles[status]}`}>
+        <h2 className="text-caption font-medium">{title}</h2>
+        <button type="button" aria-label="Column options">
+          <EllipsisVertical size={16} />
+        </button>
+      </header>
+
+      <div className="flex flex-col gap-3 p-3">
+        
+        <Button
+          variant="outline"
+          className="w-full rounded-full border-dashed border-primary-blue-500 text-primary-blue-500"
+        >
+          Add Task <Plus size={14} />
+        </Button>
+
+       
+        {tasks.map((task) => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+      </div>
+    </section>
+  )
+}

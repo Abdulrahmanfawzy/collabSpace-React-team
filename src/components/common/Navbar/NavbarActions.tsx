@@ -6,7 +6,7 @@ const NavbarActions = () => {
   return (
     <div className="flex items-center gap-6">
         
-        <SearchInput />
+        <SearchInput placeholder="Search..." width={"51.5"} style={"bg-background-main pr-1 pl-8"} iconStyle="left-1"/>
 
         <button className="relative cursor-pointer">
             <Bell  className=" w-4.5 h-5 "/>

@@ -22,7 +22,7 @@ export function FilesTab({ files }: FilesTabProps) {
         </div>
       </section>
 
-      {/* All Files */}
+      
       <section className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <h2 className="text-h5 font-semibold">All Files</h2>

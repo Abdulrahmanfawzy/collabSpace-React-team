@@ -9,6 +9,8 @@ import ProjectsPage from "./app/router/pages/projects-page";
 import ProjectDetailsPage from "./app/router/pages/project-details-page";
 import TasksPage from "./app/router/pages/tasks-page";
 import MainLayout from "./components/layout/MainLayout";
+import ReportsPage from "./features/reports/ReportsPage";
+
 
 const App = () => {
   return<>
@@ -16,6 +18,7 @@ const App = () => {
   <Routes>
           <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/projects" replace />} />
+        <Route path="/reports" element={<ReportsPage />} />
 
         <Route path="/projects" element={<ProjectsPage />} />
 

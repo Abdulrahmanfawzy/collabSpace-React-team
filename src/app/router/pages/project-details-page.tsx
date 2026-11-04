@@ -54,7 +54,7 @@ function ProjectDetailsPage() {
             
             <div className="flex flex-col gap-6 lg:col-span-2">
               <div className="rounded-base border bg-white p-6">
-                <h6 className="mb-3 text-small font-semibold">Description</h6>
+                <h6 className="mb-3 text-h6 font-semibold">Description</h6>
                 <p className="text-small text-secondary-gray-300">
                   {project.description}
                 </p>

@@ -43,11 +43,13 @@
 --color-support-purple:#6837A4;
 --color-support-pink:#C8225E;
 --color-support-dark-pink:#A43782;
+--color-soft-purple: #F3ECFA;
 
   --color-blue-900: #014162;
 
   /* background */
   --color-background-main: #F6F8FA;
+  --color-background-secondary: #F3F4F6;
     /* Font family */
 
     --font-inter: "Inter", sans-serif;
@@ -90,6 +92,9 @@
   --text-caption-small: 12px;
   --text-caption-small--line-height: 1.5;
   --text-caption-small--font-weight: 400;
+
+  /* border */
+   --color-border: #848484;
 
   /*border radius */
   --radius-base: 16px;

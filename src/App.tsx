@@ -10,6 +10,8 @@ import ProjectDetailsPage from "./app/router/pages/project-details-page";
 import TasksPage from "./app/router/pages/tasks-page";
 import MainLayout from "./components/layout/MainLayout";
 import ReportsPage from "./features/reports/ReportsPage";
+import CalendaPage from "./app/router/pages/CalendaPage";
+import MettingDetailsPage from "./app/router/pages/MettingDetailsPage";
 
 
 const App = () => {
@@ -26,6 +28,10 @@ const App = () => {
           path="/projects/:projectId"
           element={<ProjectDetailsPage />}
         />
+
+        <Route path="/meetings" element={<CalendaPage />} />
+
+        <Route path="/meetings/:id" element={<MettingDetailsPage />} />
 
         <Route path="/tasks" element={<TasksPage />} />
           

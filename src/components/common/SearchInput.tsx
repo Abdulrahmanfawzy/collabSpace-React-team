@@ -1,21 +1,56 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import {useSearchParams} from "react-router-dom"
 
 type SearchInputProps = {
   placeholder: string,
   width : string,
   style : string,
-  iconStyle: string
+  iconStyle: string ,
+  paramKey: string
 }
-const SearchInput = ({placeholder , width , style , iconStyle} : SearchInputProps) => {
+const SearchInput = ({placeholder , width , style , iconStyle , paramKey} : SearchInputProps) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const searchValue = searchParams.get("search") || "";
+  const searchValue = searchParams.get(paramKey) || "";
 
+  const [inputValue , setInputValue] = useState(searchValue);
+
+
+  // to update searchParams
+  useEffect(()=> { 
+    const timeDebounce = setTimeout(() => {      
+      setSearchParams((prev) => {
+        const currentSearch = prev.get(paramKey) || "";
+        if(currentSearch === inputValue){
+          return prev;
+        }
+        if(inputValue.trim()){
+          prev.set(paramKey , inputValue)
+        }else {
+          prev.delete(paramKey)
+        }
+        return prev;
+      });
+    }, 500);
+
+    return ()=> {
+      clearTimeout(timeDebounce)
+    }
+  } , [inputValue  , setSearchParams , paramKey])
+
+
+  // update inputValue when change searchParams
+  useEffect(() => {
+    setInputValue(searchValue)
+  }, [searchValue]);
+
+  
   const handleSearch = ( e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchParams({ search: e.target.value });
+    setInputValue(e.target.value)
   }
 
   return (
@@ -27,7 +62,7 @@ const SearchInput = ({placeholder , width , style , iconStyle} : SearchInputProp
         type="text"
         placeholder={placeholder}
         className={` ${style} rounded-pill py-1 text-black font-normal text-small shadow-none border-0`}
-        value={searchValue}
+        value={inputValue}
         onChange={handleSearch}
       />
 
@@ -36,3 +71,6 @@ const SearchInput = ({placeholder , width , style , iconStyle} : SearchInputProp
 };
 
 export default SearchInput;
+
+
+

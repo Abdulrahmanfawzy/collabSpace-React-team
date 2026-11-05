@@ -1,5 +1,7 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { User, Mail, Lock, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -10,29 +12,61 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-const SignUpPage = () => {
+/* Step 1: define zod validation schema */
+const registerSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name is too long"),
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Must contain at least one number"),
+  rememberMe: z.boolean().optional(),
+});
+
+type RegisterFormData = z.infer<typeof registerSchema>;
+
+const Register = () => {
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
+  // Step 2: useForm setup
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success('Account created successfully! (UI Mock)')
-      navigate("/sign-in");
-    }, 1000);
+  const rememberMe = watch("rememberMe");
+
+  // Step 3: Handle Submit
+  const onSubmit = async (data: RegisterFormData) => {
+    // Simulates the API call for a second
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    console.log("Registered Data:", data);
+    toast.success("Account created successfully!");
+    navigate("/sign-in");
   };
 
   return (
     <AuthLayout>
-      <div className="w-full max-w-110 bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 sm:p-10">
-
+      <div className="w-full max-w-[537px] bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 sm:p-10">
         <div className="text-center mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
             Sign Up
@@ -42,10 +76,11 @@ const SignUpPage = () => {
           </p>
         </div>
 
+        {/* Google Button */}
         <Button
           type="button"
           variant="outline"
-          className="w-full h-11 rounded-xl border-gray-200 hover:bg-gray-50 text-gray-700 font-medium text-sm flex items-center justify-center gap-2 cursor-pointer shadow-none"
+          className="w-full max-w-[473px] h-10 rounded-[32px] border-gray-200 hover:bg-gray-50 text-gray-700 font-medium text-sm flex items-center justify-center gap-2 cursor-pointer shadow-none mx-auto"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path
@@ -70,25 +105,30 @@ const SignUpPage = () => {
 
         <AuthDivider />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Form with React Hook Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Full Name */}
           <div className="relative">
             <Label
-              htmlFor="fullName"
+              htmlFor="name"
               className="absolute -top-2 left-3.5 bg-white px-1.5 text-xs text-gray-500 z-10 font-medium"
             >
               Full Name
             </Label>
             <Input
-              id="fullName"
+              id="name"
               type="text"
               placeholder="Full Name"
               startIcon={<User className="w-4 h-4 text-gray-400" />}
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
+              {...register("name")}
+              variant={errors.name ? "error" : "default"}
             />
+            {errors.name && (
+              <p className="text-xs text-red-500 mt-1 pl-1">{errors.name.message}</p>
+            )}
           </div>
 
+          {/* Email */}
           <div className="relative">
             <Label
               htmlFor="email"
@@ -101,12 +141,15 @@ const SignUpPage = () => {
               type="email"
               placeholder="Your Email"
               startIcon={<Mail className="w-4 h-4 text-gray-400" />}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              {...register("email")}
+              variant={errors.email ? "error" : "default"}
             />
+            {errors.email && (
+              <p className="text-xs text-red-500 mt-1 pl-1">{errors.email.message}</p>
+            )}
           </div>
 
+          {/* Password */}
           <div className="relative">
             <Label
               htmlFor="password"
@@ -119,32 +162,36 @@ const SignUpPage = () => {
               type="password"
               placeholder="Password"
               startIcon={<Lock className="w-4 h-4 text-gray-400" />}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              {...register("password")}
+              variant={errors.password ? "error" : "default"}
             />
+            {errors.password && (
+              <p className="text-xs text-red-500 mt-1 pl-1">{errors.password.message}</p>
+            )}
           </div>
 
+          {/* Remember Me */}
           <div className="flex items-center gap-2 pt-1 pb-1">
             <Checkbox
-              id="terms"
+              id="rememberMe"
               checked={rememberMe}
-              onCheckedChange={(checked) => setRememberMe(!!checked)}
+              onCheckedChange={(checked) => setValue("rememberMe", !!checked)}
             />
             <Label
-              htmlFor="terms"
+              htmlFor="rememberMe"
               className="text-xs sm:text-sm font-medium text-gray-600 cursor-pointer select-none"
             >
               Remember Me
             </Label>
           </div>
 
+          {/* Submit Button */}
           <Button
             type="submit"
-            disabled={isLoading}
-            className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl text-base shadow-none cursor-pointer transition-all"
+            disabled={isSubmitting}
+            className="w-full max-w-[473px] h-10 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-[32px] text-sm shadow-none cursor-pointer transition-all mx-auto"
           >
-            {isLoading ? (
+            {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 <span>Creating account...</span>
@@ -169,4 +216,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default Register;

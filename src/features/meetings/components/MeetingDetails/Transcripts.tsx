@@ -14,9 +14,9 @@ const Transcripts = () => {
   ]
 
   return (
-    <section className="w-133 bg-white rounded-4xl px-4 py-17 flex flex-col gap-5 ml-8 mr-13 mt-10">
+    <section className=" bg-white rounded-4xl px-4 py-17 flex flex-col gap-5 ml-8 mr-13 mt-10">
         <TranscriptsHeader />
-        <SearchInput placeholder="Search Transcript" width={"full"} style={"bg-background-secondary pr-4 pl-11"} iconStyle="left-4"/>
+        <SearchInput placeholder="Search Transcript" width={"full"} style={"bg-background-secondary pr-4 pl-11"} iconStyle="left-4" paramKey="meetingSearch"/>
         <div className="flex flex-col gap-5">
           {transcripts?.map(t => (
              <TranscriptCard key={t.time} time={t.time} name={t.name} text={t.text}/>

@@ -1,50 +1,59 @@
-import { Button } from '@/components/ui/button';
-import avetar from '../../../assets/images/profile-avtar.svg'
-import { Plus } from 'lucide-react';
 
-type Meeting = {
-  id: number;
-  title: string;
-  day: number;
-  start: number;
-  end: number;
+import { Button } from "@/components/ui/button";
+import type { EventDisplayInfo } from "@fullcalendar/react";
+import { Plus } from "lucide-react";
+
+type MeetingEventProps = {
+  info: EventDisplayInfo;
 };
 
-type MeetingCardProps = {
-  event: Meeting;
-};
+const MeetingCard = ({ info }: MeetingEventProps) => {
+  const { members } = info.event.extendedProps;
 
-const MeetingCard = ({ event }: MeetingCardProps) => {
-  const formatTime = (hour: number) => {
-    const period = hour >= 12 ? "PM" : "AM";
-    const formattedHour = hour % 12 || 12;
-
-    const minutes = hour % 1 === 0 ? "00" : "30";
-
-    return `${formattedHour}:${minutes} ${period}`;
-  };
 
   return (
-    <div className=" w-full overflow-hidden rounded-lg flex flex-col gap-4 bg-white p-3 border border-background-main">
-        <div className="w-full flex flex-col gap-2">
-            <h3 className="text-small font-normal">
-                {event.title}
-            </h3>
+    <div className="flex max-h-27 w-50 flex-col gap-4  rounded-4xl bg-white text-black p p-3 border border-background-main cursor-pointer">
 
-            <p className="text-caption-small font-normal text-black/75">
-                {formatTime(event.start)} - {formatTime(event.end)}
-            </p>
-        </div>
+      {/* Meeting Title */}
 
-        <div className='w-full flex items-center gap-1'>
-            <div className='grow'>
-                <img src={avetar} alt="user image" className="w-8 h-8 rounded-full border-2"/>
-            </div>
-            <Button variant={"default"} className='flex items-center gap-1 cursor-pointer bg-transparent border-0 text-caption-small font-normal text-black/70 hover:bg-transparent'>
-                Join
-                <Plus className="size-4" />
-            </Button>
-        </div>
+      {/* Time */}
+      <div className="flex flex-col gap-2">
+
+        <h3 className=" text-small font-normal">
+          {info.event.title}
+        </h3>
+
+        <span className="text-caption-small font-normal">
+          {info.timeText}
+        </span>
+      </div>
+
+
+
+      {/* Members */}
+    <div className="flex items-center">
+      <div className="flex items-center grow">
+        {members?.slice(0, 2).map((member: { id: string; avatar: string }) => (
+          <img
+            key={member.id}
+            src={member.avatar}
+            alt="Member"
+            className="size-8 rounded-4xl border-2 border-white object-cover"
+          />
+        ))}
+
+        {members?.length > 2 && (
+          <span className="w-8 h-8 rounded-full flex justify-center items-center text-[10px] font-bold bg-[#F2F4F7] text-[#606C80]">
+            +{members.length - 2}
+          </span>
+        )}
+      </div>
+      <Button variant={"default"} className="bg-transparent text-black/70 text-caption-small cursor-pointer flex items-center gap-1 hover:bg-transparent">
+        Join
+        <Plus size={4} className="text-black"/>
+      </Button>
+    </div>
+
     </div>
   );
 };

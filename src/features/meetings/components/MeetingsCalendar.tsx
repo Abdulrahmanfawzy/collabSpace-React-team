@@ -1,130 +1,147 @@
+import FullCalendar, { useCalendarController } from "@fullcalendar/react";
+
+import themePlugin from "@fullcalendar/react/themes/monarch";
+import timeGridPlugin from "@fullcalendar/react/timegrid";
+import interactionPlugin from "@fullcalendar/react/interaction";
+
+import "@fullcalendar/react/skeleton.css";
+
 import MeetingCard from "./MeetingCard";
+import CalendarToolbar from "./CalendarToolbar";
+import { useNavigate } from "react-router-dom";
 
-const days = [
-  { name: "Wed", date: 4 },
-  { name: "Thu", date: 5 },
-  { name: "Fri", date: 6 },
-  { name: "Sat", date: 7 },
-  { name: "Sun", date: 8 },
+
+const meetings = [
+  {
+    id: "1",
+    title: "Weekly Team Sync",
+    start: "2026-11-05T09:00:00",
+    end: "2026-11-05T11:00:00",
+    color: "#DBEAFE",
+    contrastColor: "#1E40AF",
+    extendedProps: {
+      status: "Upcoming",
+      meetingType: "Online",
+      members: [
+        { id: "1", avatar: "https://i.pravatar.cc/100?img=11" },
+        { id: "2", avatar: "https://i.pravatar.cc/100?img=12" },
+        { id: "3", avatar: "https://i.pravatar.cc/100?img=13" },
+        { id: "4", avatar: "https://i.pravatar.cc/100?img=14" },
+      ],
+    },
+  },
+  {
+    id: "2",
+    title: "Weekly Team Sync",
+    start: "2026-11-10T10:00:00",
+    end: "2026-11-10T11:00:00",
+    color: "#DBEAFE",
+    contrastColor: "#1E40AF",
+    extendedProps: {
+      status: "Upcoming",
+      meetingType: "Online",
+      members: [
+        { id: "1", avatar: "https://i.pravatar.cc/100?img=11" },
+        { id: "2", avatar: "https://i.pravatar.cc/100?img=12" },
+        { id: "3", avatar: "https://i.pravatar.cc/100?img=13" },
+        { id: "4", avatar: "https://i.pravatar.cc/100?img=14" },
+      ],
+    },
+  },
+  {
+    id: "3",
+    title: "Weekly Team Sync",
+    start: "2026-11-07T10:00:00",
+    end: "2026-11-07T11:00:00",
+    color: "#DBEAFE",
+    contrastColor: "#1E40AF",
+    extendedProps: {
+      status: "Incoming",
+      meetingType: "Online",
+      members: [
+        { id: "1", avatar: "https://i.pravatar.cc/100?img=11" },
+        { id: "2", avatar: "https://i.pravatar.cc/100?img=12" },
+        { id: "3", avatar: "https://i.pravatar.cc/100?img=13" },
+        { id: "4", avatar: "https://i.pravatar.cc/100?img=14" },
+      ],
+    },
+  },
 ];
-
-const hours = Array.from({ length: 10 }, (_, i) => i + 8);
-
-const events = [
-  { id: 1, title: "Design Review", day: 4, start: 8, end: 9},
-  { id: 2, title: "Project Discussion", day: 5, start: 12, end: 13.5},
-  { id: 3, title: "Sprint Planning", day: 6, start: 9, end: 10},
-];
-
-const ROW_HEIGHT = 137;
-
-const formatHour = (hour: number) => {
-  const period = hour >= 12 ? "PM" : "AM";
-  const formattedHour = hour % 12 || 12;
-
-  return `${formattedHour} ${period}`;
-};
 
 const MeetingsCalendar = () => {
+  const controller = useCalendarController();
+
+  const navigate = useNavigate()
+
   return (
-    <div className="mt-10 mx-16 overflow-x-auto">
-      
-      <div className="min-w-225">
+    <>
+      <CalendarToolbar controller={controller} />
 
-        {/* Calendar Header */}
-        <div className="grid grid-cols-6 ">
+      <div className="mt-10 mx-16 overflow-x-auto">
+        <FullCalendar
+          plugins={[themePlugin, timeGridPlugin, interactionPlugin]}
+          initialView="timeGridFiveDay"
 
-          {/* Time Header */}
-          <div className="flex h-15 items-center justify-center ">
-            <span className="text-sm font-medium ">
-              Time
-            </span>
-          </div>
+          views={{
+            timeGridFiveDay: {
+              type: "timeGrid",
+              duration: { days: 5 },
 
-          {/* Days Header */}
-          {days.map((day) => (
-            <div
-              key={day.date}
-              className="flex h-15 items-center justify-center "
-            >
-              <span className="text-sm font-medium text-foreground">
-                {day.name} {day.date}
-              </span>
+              dayHeaderClass: (info) =>
+                info.isToday ? "bg-[#E6EFFF] rounded-md p-10" : "",
+
+              dayHeaderContent: (info) => (
+                <div className="flex flex-col items-center gap-1">
+                  <span>
+                    {info.isToday
+                      ? "Today"
+                      : info.date.toLocaleDateString("en-US", {
+                          weekday: "short",
+                        })}
+                  </span>
+
+                  <span>{info.date.getDate()}</span>
+                </div>
+              ),
+              dayLaneClass: (info) =>
+                info.isToday ? "bg-[#E6EFFF]" : "",
+            },
+          }}
+
+          eventClick={(info) => {
+            const meetingId = info.event.id;
+
+            navigate(`/meetings/${meetingId}`);
+          }}
+
+
+          slotMinTime="09:00:00"
+          slotMaxTime="17:00:00"
+          slotDuration="01:00:00"
+          slotMinHeight={137}
+          events={meetings}
+          eventContent={(info) => (
+            <div className="bg-transparent py-4 px-3 flex justify-center items-center">
+              <MeetingCard info={info} />
             </div>
-          ))}
-        </div>
-
-        {/* Calendar Body */}
-        <div className="grid grid-cols-6 ">
-
-          {/* Time Column */}
-          <div>
-            {hours.map((hour) => (
-              <div
-                key={hour}
-                className="flex items-center justify-center  text-xs "
-                style={{ height: ROW_HEIGHT }}
-              >
-                {formatHour(hour)}
-              </div>
-            ))}
-          </div>
-
-
-
-          {/* Days Columns */}
-          {days.map((day) => (
-            <div key={day.date} className="relative">
-              {hours.map((hour) => {
-                const meeting = events.find(
-                  (event) =>
-                    event.day === day.date &&
-                    hour >= event.start &&
-                    hour < event.end
-                );
-
-                return (
-                  <div
-                    key={hour}
-                    className="relative flex items-center justify-center"
-                    style={{ height: ROW_HEIGHT }}
-                  >
-                    {!meeting && (
-                      <span className="text-sm font-medium text-muted-foreground">
-                        {day.name}
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
-
-              {/* Meetings */}
-              {events
-                .filter((event) => event.day === day.date)
-                .map((event) => {
-                  const top = (event.start - 8) * ROW_HEIGHT;
-                  const height = (event.end - event.start) * ROW_HEIGHT;
-
-                  return (
-                    <div
-                      key={event.id}
-                      className="absolute left-0 right-0 px-1"
-                      style={{
-                        top,
-                        height,
-                      }}
-                    >
-                      <MeetingCard event={event} />
-                    </div>
-                  );
-                })}
-            </div>
-          ))}
-
-
-        </div>
+          )}
+          controller={controller}
+          headerToolbar={false}
+          slotHeaderFormat={{
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: false,
+          }}
+          slotHeaderInnerClass="w-[150px] h-[137px] flex justify-center items-center"
+          height="auto"
+          dayHeaderInnerClass="flex flex-col gap-0.5 items-center py-2 text-[14px] font-medium"
+          allDaySlot={true}
+          allDayHeaderContent="Time"
+          allDayHeaderClass="absolute top-2 text-[14px] font-medium flex justify-center items-center"
+          allDayHeaderInnerClass="px-10"
+        />
       </div>
-    </div>
+    </>
   );
 };
 

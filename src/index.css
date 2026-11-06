@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 /* getting error here */
 @import "tw-animate-css";
 
@@ -34,6 +33,7 @@
   --color-secondary-gray-800: #151518;
   --color-secondary-gray-900: #101012;
    --color-text-secondary:#4A4A4A;
+   --color-muted-foreground: #606C80;
 
 
 /* support */
@@ -95,10 +95,12 @@
 
   /* border */
    --color-border: #848484;
+   --color-border-secondary: #C2C2C2;
 
   /*border radius */
   --radius-base: 16px;
   --radius-pill: 100px;
+  --radius-card: 28px;
 
   --background-image-navbar-shadow: linear-gradient(
     180deg,

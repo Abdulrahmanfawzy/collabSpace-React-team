@@ -8,7 +8,7 @@ const SearchInput = () => {
       <Input
         type="text"
         placeholder="Search..."
-        className=" bg-background-main rounded-pill py-1  pr-1 pl-8  text-black font-normal text-small shadow-none border-0"
+        className=" bg-background-main rounded-pill py-1  pr-1 pl-8  text-black font-normal text-small shadow-none border w-80"
       />
     </div>
   );

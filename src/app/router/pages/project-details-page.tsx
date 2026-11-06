@@ -38,7 +38,7 @@ function ProjectDetailsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 bg-secondary-gray-50/40 p-6">
+    <div className="flex flex-col gap-6  p-6">
       <ProjectHeader project={project} />
 
       <Tabs defaultValue="overview" className="w-full">

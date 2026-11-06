@@ -3,10 +3,10 @@ import Navbar from "@/components/common/Navbar/Navbar"
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen bg-secondary-gray-50">
+    <div className="min-h-screen  ">
       <Navbar />
 
-      <main>
+      <main className=" w-full mx-auto px-6.5  ">
         <Outlet />
       </main>
     </div>

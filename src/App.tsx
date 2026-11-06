@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import Dashboard from "../src/app/router/pages/Dashboard"
-const App = () => {
-  return <div className="text-center">
-    <Dashboard/>
-  </div>;
-};
-
-export default App;
-=======
 
 import {
   BrowserRouter,
@@ -50,4 +40,4 @@ const App = () => {
 
 export default App;
 
->>>>>>> fac8ab8cb4d4a9ebb670fa2c2ee7016ac8e7f11b
+

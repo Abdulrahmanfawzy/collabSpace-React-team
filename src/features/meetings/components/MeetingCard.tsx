@@ -33,17 +33,17 @@ const MeetingCard = ({ info }: MeetingEventProps) => {
       {/* Members */}
     <div className="flex items-center">
       <div className="flex items-center grow">
-        {members?.slice(0, 2).map((member: { id: string; avatar: string }) => (
+        {members?.slice(0, 2).map((member: { id: string; avatar: string } , i : number) => (
           <img
             key={member.id}
             src={member.avatar}
             alt="Member"
-            className="size-8 rounded-4xl border-2 border-white object-cover"
+            className={`size-8 rounded-4xl border-2 border-secondary object-cover ${ i !== 0 ? "-ml-3" : ""}`}
           />
         ))}
 
         {members?.length > 2 && (
-          <span className="w-8 h-8 rounded-full flex justify-center items-center text-[10px] font-bold bg-[#F2F4F7] text-[#606C80]">
+          <span className="w-8 h-8 rounded-full flex justify-center items-center text-[10px] font-bold bg-background-secondary text-muted-foreground">
             +{members.length - 2}
           </span>
         )}

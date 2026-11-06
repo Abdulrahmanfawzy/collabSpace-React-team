@@ -17,7 +17,7 @@ const MeetingInfo = () => {
 
         <MeetingOverview />
 
-        <div className='w-188 h-81 rounded-[28px] overflow-hidden relative mt-5 mb-6'>
+        <div className='w-188 h-81 rounded-card overflow-hidden relative mt-5 mb-6'>
             <img src={videoImage} alt="Video Image" className='w-full h-full object-cover' />
             <img src={playIcon} alt="Video play icon" className='w-10 h-10 absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2' />
         </div>

@@ -15,10 +15,8 @@ const meetings = [
   {
     id: "1",
     title: "Weekly Team Sync",
-    start: "2026-11-05T09:00:00",
-    end: "2026-11-05T11:00:00",
-    color: "#DBEAFE",
-    contrastColor: "#1E40AF",
+    start: "2026-11-06T09:00:00",
+    end: "2026-11-06T10:00:00",
     extendedProps: {
       status: "Upcoming",
       meetingType: "Online",
@@ -35,8 +33,6 @@ const meetings = [
     title: "Weekly Team Sync",
     start: "2026-11-10T10:00:00",
     end: "2026-11-10T11:00:00",
-    color: "#DBEAFE",
-    contrastColor: "#1E40AF",
     extendedProps: {
       status: "Upcoming",
       meetingType: "Online",
@@ -53,8 +49,6 @@ const meetings = [
     title: "Weekly Team Sync",
     start: "2026-11-07T10:00:00",
     end: "2026-11-07T11:00:00",
-    color: "#DBEAFE",
-    contrastColor: "#1E40AF",
     extendedProps: {
       status: "Incoming",
       meetingType: "Online",
@@ -88,7 +82,7 @@ const MeetingsCalendar = () => {
               duration: { days: 5 },
 
               dayHeaderClass: (info) =>
-                info.isToday ? "bg-[#E6EFFF] rounded-md p-10" : "",
+                info.isToday ? "bg-primary-blue-50 rounded-md p-10" : "",
 
               dayHeaderContent: (info) => (
                 <div className="flex flex-col items-center gap-1">
@@ -104,7 +98,8 @@ const MeetingsCalendar = () => {
                 </div>
               ),
               dayLaneClass: (info) =>
-                info.isToday ? "bg-[#E6EFFF]" : "",
+                info.isToday ? "bg-primary-blue-50" : "",
+              
             },
           }}
 
@@ -132,13 +127,69 @@ const MeetingsCalendar = () => {
             minute: "2-digit",
             hour12: false,
           }}
-          slotHeaderInnerClass="w-[150px] h-[137px] flex justify-center items-center"
+          slotHeaderInnerClass="w-38 h-34 flex justify-center items-center"
           height="auto"
-          dayHeaderInnerClass="flex flex-col gap-0.5 items-center py-2 text-[14px] font-medium"
+          dayHeaderInnerClass="flex flex-col gap-0.5 items-center py-2 text-small font-medium"
           allDaySlot={true}
           allDayHeaderContent="Time"
-          allDayHeaderClass="absolute top-2 text-[14px] font-medium flex justify-center items-center"
-          allDayHeaderInnerClass="px-10"
+          allDayHeaderClass="absolute top-2 text-small font-medium flex justify-center items-center"
+          allDayHeaderInnerClass="px-2.5"
+          
+          dayLaneDidMount={(info) => {
+            const lane = info.el;
+
+            lane.style.position = "relative";
+
+            const overlay = document.createElement("div");
+
+            overlay.style.cssText = `
+              position: absolute;
+              inset: 0;
+              display: grid;
+              grid-template-rows: repeat(8, 1fr);
+              pointer-events: none;
+              z-index: 0;
+            `;
+
+            for (let hour = 9; hour < 17; hour++) {
+              const slotStart = new Date(info.date);
+              slotStart.setHours(hour, 0, 0, 0);
+
+              const slotEnd = new Date(slotStart);
+              slotEnd.setHours(hour + 1);
+
+              const hasMeeting = meetings.some((meeting) => {
+                const meetingStart = new Date(meeting.start);
+                const meetingEnd = new Date(meeting.end);
+
+                return (
+                  meetingStart < slotEnd &&
+                  meetingEnd >= slotStart &&
+                  meetingStart.toDateString() === info.date.toDateString()
+                );
+              });
+
+              if (hasMeeting) {
+                const emptySlot = document.createElement("div");
+                overlay.appendChild(emptySlot);
+                continue;
+              }
+
+              const label = document.createElement("div");
+
+              label.className =
+                "flex items-center justify-center text-small text-muted-foreground";
+
+              label.textContent = info.date.toLocaleDateString("en-US", {
+                weekday: "short",
+              });
+
+              overlay.appendChild(label);
+            }
+
+            lane.appendChild(overlay);
+          }}
+          
         />
       </div>
     </>

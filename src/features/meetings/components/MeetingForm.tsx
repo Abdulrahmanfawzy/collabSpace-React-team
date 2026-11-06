@@ -94,38 +94,38 @@ export default function MeetingForm({ onClose, onSubmitMeeting }: NewMeetingForm
       <div className="mb-8 flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-gray-900">New Meeting</h2>
         <Button type="button" variant="ghost" size="icon" onClick={onClose} aria-label="Close">
-          <span className="text-2xl">×</span>
+          <span className="text-2xl cursor-pointer">×</span>
         </Button>
       </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-600">Meeting Subject</label>
+        <div className="space-y-2 relative">
+          <label className="text-small font-medium text-gray-600 absolute -top-3 left-4 bg-transparent z-99">Meeting Subject</label>
           <Input {...register("subject")} placeholder="Meeting Subject" className="h-14 rounded-xl" />
-          {errors.subject && <p className="text-sm text-red-500">{errors.subject.message}</p>}
+          {errors.subject && <p className="text-small text-red-500">{errors.subject.message}</p>}
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">Select Date</label>
+        <div className="grid grid-cols-1 gap-5 items-baseline-last sm:grid-cols-3">
+          <div className="space-y-2 relative">
+            <label className="text-small font-medium text-gray-600 absolute -top-3 left-4 bg-transparent z-99">Select Date</label>
             <Input type="date" {...register("date")} className="h-14 rounded-xl" />
-            {errors.date && <p className="text-sm text-red-500">{errors.date.message}</p>}
+            {errors.date && <p className="text-small text-red-500">{errors.date.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">Select Time</label>
+          <div className="space-y-2 relative">
+            <label className="text-small font-medium text-gray-600 absolute -top-3 left-4 bg-transparent z-99">Select Time</label>
             <Input type="time" {...register("time")} className="h-14 rounded-xl" />
-            {errors.time && <p className="text-sm text-red-500">{errors.time.message}</p>}
+            {errors.time && <p className="text-small text-red-500">{errors.time.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">Select Duration</label>
+          <div className="space-y-4 relative">
+            <label className="text-small font-medium text-gray-600 absolute -top-3 left-4 bg-transparent z-99">Select Duration</label>
             <Controller
               name="duration"
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="h-14 rounded-xl">
+                  <SelectTrigger className="py-6 rounded-xl">
                     <SelectValue placeholder="Select Duration" />
                   </SelectTrigger>
                   <SelectContent>
@@ -143,8 +143,8 @@ export default function MeetingForm({ onClose, onSubmitMeeting }: NewMeetingForm
           </div>
         </div>
 
-        <div className="space-y-3">
-          <label className="text-sm font-medium text-gray-600">Add Guests</label>
+        <div className="space-y-3 relative">
+          <label className="text-small font-medium text-gray-600 absolute -top-3 left-4 bg-transparent z-99">Add Guests</label>
           <div className="relative flex gap-2">
             <Input
               value={guestInput}
@@ -156,9 +156,9 @@ export default function MeetingForm({ onClose, onSubmitMeeting }: NewMeetingForm
                 }
               }}
               placeholder="@Enter guest name"
-              className="h-14 rounded-xl"
+              className="h-10 rounded-xl"
             />
-            <Button type="button" onClick={handleAddGuest} className="absolute right-0 h-14 rounded-full px-7 transition duration-300 bg-black text-white cursor-pointer hover:bg-black/90">
+            <Button type="button" onClick={handleAddGuest} className="absolute right-0 h-10 rounded-full px-7 transition duration-300 bg-black text-white cursor-pointer hover:bg-black/90">
               Add +
             </Button>
           </div>
@@ -182,8 +182,8 @@ export default function MeetingForm({ onClose, onSubmitMeeting }: NewMeetingForm
           </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-600">Add Note</label>
+        <div className="space-y-2 relative">
+          <label className="text-sm font-medium text-gray-600 absolute -top-3 left-4 bg-transparent z-99 ">Add Note</label>
           <textarea
             {...register("note")}
             placeholder="Add a note..."
@@ -191,14 +191,14 @@ export default function MeetingForm({ onClose, onSubmitMeeting }: NewMeetingForm
           />
           <div className="flex justify-between">
             {errors.note ? <p className="text-sm text-red-500">{errors.note.message}</p> : <span />}
-            <span className="text-xs text-gray-400">{watch("note").length}/500</span>
+            <span className="text-caption-small text-gray-400">{watch("note").length}/500</span>
           </div>
         </div>
 
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="h-14 w-full cursor-pointer rounded-full bg-primary-blue-500 text-base font-semibold transition duration-300 hover:bg-primary-blue-700"
+          className="py-4 w-full cursor-pointer rounded-full bg-primary-blue-500 text-base font-semibold transition duration-300 hover:bg-primary-blue-700"
         >
           {isSubmitting ? "Creating Meeting..." : "Add Meeting"}
         </Button>

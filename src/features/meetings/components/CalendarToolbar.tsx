@@ -14,24 +14,24 @@ const CalendarToolbar = ({controller} : CalendarToolbarProps) => {
     <section className="flex items-center gap-8 ml-16 mr-16 mb-10">
 
         {/* Month Navigation */}
-        <div className="flex items-center gap-3 grow">
+        <div className="flex items-center gap-4 grow">
 
           <button
             onClick={() => controller.prev()}
-            className="p-2 cursor-pointer hover:bg-muted"
+            className="cursor-pointer"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft className="w-6 h-6" />
           </button>
 
-          <h2 className="text-lg font-semibold ">
+          <h2 className="text-xl font-medium ">
             {controller?.view?.title}
           </h2>
 
           <button
             onClick={() => controller.next()}
-            className="p-2 cursor-pointer hover:bg-muted"
+            className="cursor-pointer"
           >
-            <ChevronRight size={18} />
+            <ChevronRight className="w-6 h-6" />
           </button>
       </div>
 

@@ -13,7 +13,7 @@ const MeetingsHeader = () => {
 
   return (
     <>
-      <section className="ml-16.25 mr-16 mt-12 mb-10.5 flex items-center justify-between">
+      <section className="ml-16 mr-16 mt-12 mb-10.5 flex items-center justify-between">
         <h1 className="text-h4 font-semibold">
           Meetings
         </h1>
@@ -29,7 +29,7 @@ const MeetingsHeader = () => {
       </section>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-[600px] max-w-[90vw] max-h-[95vh] overflow-y-auto p-0">
+        <DialogContent showCloseButton={false} >
           <MeetingForm
             onClose={() => setIsOpen(false)}
             onSubmitMeeting={(data) => {

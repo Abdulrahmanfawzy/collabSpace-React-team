@@ -4,13 +4,11 @@
 /* getting error here */
 @import "tw-animate-css";
 
-<<<<<<< HEAD
-=======
 /* Rubik Font  */
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap");
 
 
->>>>>>> fac8ab8cb4d4a9ebb670fa2c2ee7016ac8e7f11b
+
 @theme {
   /* primary */
   --color-primary-blue-50 :#E6EFFF;

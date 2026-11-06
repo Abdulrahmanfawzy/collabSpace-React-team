@@ -5,11 +5,12 @@ const NavbarLinks = () => {
   const location = useLocation()
 
   const links = [
-    { text: "Dashboard", path: "/" },
+    { text: "Dashboard", path: "/dashboard" },
     { text: "Projects", path: "/projects" },
     { text: "Chats", path: "/chats" },
     { text: "Meetings", path: "/meetings" },
     { text: "Reports", path: "/reports" },
+ 
   ]
 
   return (

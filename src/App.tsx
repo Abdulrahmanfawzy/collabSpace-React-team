@@ -11,6 +11,9 @@ import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
 
+import ProjectsChatsPage from "./app/router/pages/projects-chat-page";
+import ProjectChannelPage from "./app/router/pages/projectChat-page";
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -30,8 +33,11 @@ const App = () => {
           />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/chats" element={<ProjectsChatsPage/>}/>
+          <Route path="/chats/:chatId" element={<ProjectChannelPage/>}/>
         </Route>
       </Routes>
+      
     </BrowserRouter>
   );
 };

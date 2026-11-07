@@ -6,6 +6,8 @@ import ProjectsPage from "./app/router/pages/projects-page";
 import ProjectDetailsPage from "./app/router/pages/project-details-page";
 import TasksPage from "./app/router/pages/tasks-page";
 import ReportsPage from "./features/reports/ReportsPage";
+import CalendarPage from "./app/router/pages/CalendarPage";
+import MettingDetailsPage from "./app/router/pages/MettingDetailsPage";
 
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
@@ -29,6 +31,10 @@ const App = () => {
             element={<ProjectDetailsPage />}
           />
           <Route path="/tasks" element={<TasksPage />} />
+          
+          <Route path="/meetings" element={<CalendarPage />} />
+          <Route path="/meetings/:id"  element={<MettingDetailsPage />} />
+
           <Route path="/reports" element={<ReportsPage />} />
         </Route>
       </Routes>

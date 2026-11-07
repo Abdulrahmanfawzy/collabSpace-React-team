@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 /* getting error here */
 @import "tw-animate-css";
 
@@ -34,6 +33,7 @@
   --color-secondary-gray-800: #151518;
   --color-secondary-gray-900: #101012;
    --color-text-secondary:#4A4A4A;
+   --color-muted-foreground: #606C80;
 
 
 /* support */
@@ -43,11 +43,13 @@
 --color-support-purple:#6837A4;
 --color-support-pink:#C8225E;
 --color-support-dark-pink:#A43782;
+--color-soft-purple: #F3ECFA;
 
   --color-blue-900: #014162;
 
   /* background */
   --color-background-main: #F6F8FA;
+  --color-background-secondary: #F3F4F6;
     /* Font family */
 
     --font-inter: "Inter", sans-serif;
@@ -91,9 +93,14 @@
   --text-caption-small--line-height: 1.5;
   --text-caption-small--font-weight: 400;
 
+  /* border */
+   --color-border: #848484;
+   --color-border-secondary: #C2C2C2;
+
   /*border radius */
   --radius-base: 16px;
   --radius-pill: 100px;
+  --radius-card: 28px;
 
   --background-image-navbar-shadow: linear-gradient(
     180deg,

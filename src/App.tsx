@@ -10,6 +10,8 @@ import ReportsPage from "./features/reports/ReportsPage";
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
+import ProfilePage from "./app/router/pages/profile-page";
+import ProfileSettingsPage from "./app/router/pages/profile-settings-page";
 
 const App = () => {
   return (
@@ -21,7 +23,6 @@ const App = () => {
         <Route path="/sign-up" element={<Resgister />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-        {/* 3. صفحات التطبيق الداخلية (الخاصة بالتيم مع الـ MainLayout) */}
         <Route element={<MainLayout />}>
           <Route path="/projects" element={<ProjectsPage />} />
           <Route
@@ -30,6 +31,9 @@ const App = () => {
           />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/reports" element={<ReportsPage />} />
+
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/settings" element={<ProfileSettingsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

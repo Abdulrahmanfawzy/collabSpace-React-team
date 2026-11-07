@@ -4,11 +4,22 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import { Toaster } from "sonner";
+
+
 
 import ProjectsPage from "./app/router/pages/projects-page";
 import ProjectDetailsPage from "./app/router/pages/project-details-page";
 import TasksPage from "./app/router/pages/tasks-page";
-import MainLayout from "./components/layout/MainLayout";
+import ReportsPage from "./features/reports/ReportsPage";
+import CalendarPage from "./app/router/pages/CalendarPage";
+import MettingDetailsPage from "./app/router/pages/MettingDetailsPage";
+
+import Login from "./app/router/pages/login";
+import Resgister from "./app/router/pages/register";
+import ForgotPasswordPage from "./app/router/pages/forgot-password";
+import {MainLayout} from './components/layout/MainLayout';
+
 
 const router = createBrowserRouter([
   {
@@ -32,15 +43,40 @@ const router = createBrowserRouter([
         element: <TasksPage />,
       },
       {
+        path: "meetings",
+        element: <CalendarPage />,
+      },
+      {
+        path: "meetings/:id",
+        element: <MettingDetailsPage />,
+      },
+      {
         path: "reports",
-        element: <TasksPage />,
+        element: <ReportsPage />,
       },
     ],
+  },
+  {
+    path: "/sign-in",
+    element: <Login />,
+  },
+  {
+    path: "/sign-up",
+    element: <Resgister />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />,
   },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <Toaster position="top-center" richColors />
+      <RouterProvider router={router} />
+    </>
+  );
 }
 
 export default App;

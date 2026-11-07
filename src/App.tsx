@@ -18,7 +18,7 @@ import MettingDetailsPage from "./app/router/pages/MettingDetailsPage";
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
-import {MainLayout} from './components/layout/MainLayout';
+import MainLayout from './components/layout/MainLayout';
 
 
 const router = createBrowserRouter([

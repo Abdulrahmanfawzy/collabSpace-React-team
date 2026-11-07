@@ -1,7 +1,13 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import { Toaster } from "sonner";
 
-import MainLayout from "./components/layout/MainLayout";
+
+
 import ProjectsPage from "./app/router/pages/projects-page";
 import ProjectDetailsPage from "./app/router/pages/project-details-page";
 import TasksPage from "./app/router/pages/tasks-page";
@@ -12,34 +18,65 @@ import MettingDetailsPage from "./app/router/pages/MettingDetailsPage";
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
+import {MainLayout} from './components/layout/MainLayout';
 
-const App = () => {
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/projects" replace />,
+      },
+      {
+        path: "projects",
+        element: <ProjectsPage />,
+      },
+      {
+        path: "projects/:projectId",
+        element: <ProjectDetailsPage />,
+      },
+      {
+        path: "tasks",
+        element: <TasksPage />,
+      },
+      {
+        path: "meetings",
+        element: <CalendarPage />,
+      },
+      {
+        path: "meetings/:id",
+        element: <MettingDetailsPage />,
+      },
+      {
+        path: "reports",
+        element: <ReportsPage />,
+      },
+    ],
+  },
+  {
+    path: "/sign-in",
+    element: <Login />,
+  },
+  {
+    path: "/sign-up",
+    element: <Resgister />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />,
+  },
+]);
+
+function App() {
   return (
-    <BrowserRouter>
+    <>
       <Toaster position="top-center" richColors />
-      <Routes>
-        <Route path="/" element={<Navigate to="/sign-in" replace />} />
-        <Route path="/sign-in" element={<Login />} />
-        <Route path="/sign-up" element={<Resgister />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-
-        {/* 3. صفحات التطبيق الداخلية (الخاصة بالتيم مع الـ MainLayout) */}
-        <Route element={<MainLayout />}>
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route
-            path="/projects/:projectId"
-            element={<ProjectDetailsPage />}
-          />
-          <Route path="/tasks" element={<TasksPage />} />
-          
-          <Route path="/meetings" element={<CalendarPage />} />
-          <Route path="/meetings/:id"  element={<MettingDetailsPage />} />
-
-          <Route path="/reports" element={<ReportsPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      <RouterProvider router={router} />
+    </>
   );
-};
+}
 
 export default App;

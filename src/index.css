@@ -155,6 +155,14 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@layer components{
+  .max-w-custom{
+    @apply w-[1290px]
+  }
+
+}
+
+
 :root {
   --primary-color: #014162;
   --radius: 0.625rem;

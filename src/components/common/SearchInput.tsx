@@ -1,14 +1,74 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-const SearchInput = () => {
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
+type SearchInputProps = {
+  placeholder: string;
+  width: string;
+  style: string;
+  iconStyle: string;
+  paramKey: string;
+};
+
+const SearchInput = ({
+  placeholder,
+  width,
+  style,
+  iconStyle,
+  paramKey,
+}: SearchInputProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const searchValue = searchParams.get(paramKey) || "";
+  const [inputValue, setInputValue] = useState(searchValue);
+
+  // Update searchParams
+  useEffect(() => {
+    const timeDebounce = setTimeout(() => {
+      setSearchParams((prev) => {
+        const currentSearch = prev.get(paramKey) || "";
+
+        if (currentSearch === inputValue) {
+          return prev;
+        }
+
+        if (inputValue.trim()) {
+          prev.set(paramKey, inputValue);
+        } else {
+          prev.delete(paramKey);
+        }
+
+        return prev;
+      });
+    }, 500);
+
+    return () => clearTimeout(timeDebounce);
+  }, [inputValue, setSearchParams, paramKey]);
+
+  // Update inputValue when searchParams change
+  useEffect(() => {
+    setInputValue(searchValue);
+  }, [searchValue]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
   return (
-    <div className="relative w-md">
-      <Search className="absolute left-1 top-1/2 -translate-y-1/2 w-5 h-5 cursor-pointer" />
+    <div className={`relative w-${width}`}>
+      <Search
+        className={`absolute ${iconStyle} top-1/2 -translate-y-1/2 w-5 h-5 cursor-pointer`}
+      />
 
       <Input
         type="text"
-        placeholder="Search..."
-        className=" bg-background-main rounded-pill py-1  pr-1 pl-8  text-black font-normal text-small shadow-none border-0"
+        placeholder={placeholder}
+        className={`${style} rounded-pill py-1 text-black font-normal text-small shadow-none border-0`}
+        value={inputValue}
+        onChange={handleSearch}
       />
     </div>
   );

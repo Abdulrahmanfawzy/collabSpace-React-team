@@ -22,7 +22,7 @@ export function TaskColumn({ title, status, tasks }: TaskColumnProps) {
     <section className="flex min-w-65 flex-1 flex-col overflow-hidden rounded-base border border-secondary-gray-50 bg-white">
       
 
-      <header className={`flex items-center justify-between px-3 py-2 ${headerStyles[status]}`}>
+      <header className={`flex items-center justify-between px-3 py-5 ${headerStyles[status]}`}>
         <h2 className="text-caption font-medium">{title}</h2>
         <button type="button" aria-label="Column options">
           <EllipsisVertical size={16} />

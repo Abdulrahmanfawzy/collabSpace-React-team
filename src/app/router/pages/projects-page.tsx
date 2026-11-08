@@ -12,6 +12,7 @@ import {
 import { ProjectsTable } from "@/features/projects/components/projects-table"
 import { projectsMock } from "@/features/projects/data/projects.mock"
 import SearchInput from "@/components/common/SearchInput"
+import { AddProjectDialog } from "@/features/projects/components/add-project-dialog"
 
 export default function ProjectsPage() {
   const [search, setSearch] = useState("")
@@ -21,13 +22,12 @@ export default function ProjectsPage() {
   )
 
   return (
-    <div className="flex flex-col gap-6 p-6  bg-secondary-gray-50/40">
+    <div className="flex flex-col gap-6 p-6 ">
       
       <div className="flex items-center justify-between">
         <h1 className="text-h4 font-semibold">All Projects</h1>
-        <Button className="bg-primary-blue-500 hover:bg-primary-blue-600 rounded-2xl">
-          Add Project <Plus size={14} />
-        </Button>
+       
+        <AddProjectDialog/>
       </div>
 
       <div className="flex items-center justify-between gap-4">

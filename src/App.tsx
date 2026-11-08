@@ -11,8 +11,11 @@ import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
 
-import ProjectsChatsPage from "./app/router/pages/projects-chat-page";
-import ProjectChannelPage from "./app/router/pages/projectChat-page";
+
+import ChatsLayout from "./components/layout/chats-layout";
+import ProjectChatPage from "./app/router/pages/projectChat-page";
+import SelectChat from "./app/router/pages/select-chat";
+import PersonChatPage from "./app/router/pages/chat-page";
 
 const App = () => {
   return (
@@ -33,8 +36,13 @@ const App = () => {
           />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/reports" element={<ReportsPage />} />
-          <Route path="/chats" element={<ProjectsChatsPage/>}/>
-          <Route path="/chats/:chatId" element={<ProjectChannelPage/>}/>
+         <Route path="/chats" element={<ChatsLayout />}>
+  <Route index element={<SelectChat />} />
+  <Route path="inbox" element={<SelectChat />} />
+  <Route path="inbox/:personId" element={<PersonChatPage />} />
+  <Route path="projects" element={<SelectChat />} />
+  <Route path="projects/:projectId" element={<ProjectChatPage />} />
+</Route>
         </Route>
       </Routes>
       

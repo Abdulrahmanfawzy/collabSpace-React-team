@@ -18,43 +18,15 @@ import MettingDetailsPage from "./app/router/pages/MettingDetailsPage";
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
+import ProfilePage from "./app/router/pages/profile-page";
+import ProfileSettingsPage from "./app/router/pages/profile-settings-page";
 import {MainLayout} from './components/layout/MainLayout';
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
-    children: [
-      {
-        index: true,
-        element: <Navigate to="/projects" replace />,
-      },
-      {
-        path: "projects",
-        element: <ProjectsPage />,
-      },
-      {
-        path: "projects/:projectId",
-        element: <ProjectDetailsPage />,
-      },
-      {
-        path: "tasks",
-        element: <TasksPage />,
-      },
-      {
-        path: "meetings",
-        element: <CalendarPage />,
-      },
-      {
-        path: "meetings/:id",
-        element: <MettingDetailsPage />,
-      },
-      {
-        path: "reports",
-        element: <ReportsPage />,
-      },
-    ],
+    element: <Navigate to="/sign-in" replace />,
   },
   {
     path: "/sign-in",
@@ -67,6 +39,35 @@ const router = createBrowserRouter([
   {
     path: "/forgot-password",
     element: <ForgotPasswordPage />,
+  },
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/projects",
+        element: <ProjectsPage />,
+      },
+      {
+        path: "/projects/:projectId",
+        element: <ProjectDetailsPage />,
+      },
+      {
+        path: "/tasks",
+        element: <TasksPage />,
+      },
+      {
+        path: "/reports",
+        element: <ReportsPage />,
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
+      },
+      {
+        path: "/profile/settings",
+        element: <ProfileSettingsPage />,
+      },
+    ],
   },
 ]);
 

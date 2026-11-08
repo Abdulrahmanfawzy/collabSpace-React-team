@@ -7,6 +7,7 @@ const NavbarLinks = () => {
   const links = [
     { text: "Dashboard", path: "/" },
     { text: "Projects", path: "/projects" },
+    { text: "Tasks", path: "/tasks" },
     { text: "Chats", path: "/chats" },
     { text: "Meetings", path: "/meetings" },
     { text: "Reports", path: "/reports" },

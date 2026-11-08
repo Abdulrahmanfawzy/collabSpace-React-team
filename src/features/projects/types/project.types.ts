@@ -2,13 +2,21 @@ import type { Member, Priority } from "@/types/common"
 
 export type ProjectColor = "purple" | "teal";
 
-export type ProjectStatus =
-  | "Pending"
-  | "In Progress"
-  | "On Hold"
-  | "Completed"
-  | "Cancelled"
+// export type ProjectStatus =
+//   | "Pending"
+//   | "In Progress"
+//   | "On Hold"
+//   | "Completed"
+//   | "Cancelled"
 
+export const PROJECT_STATUSES = [
+  "Pending",
+  "In Progress",
+  "On Hold",
+  "Completed",
+  "Cancelled",
+] as const
+export type ProjectStatus = (typeof PROJECT_STATUSES)[number]
 export interface Project {
   id: number
   name: string

@@ -1,6 +1,5 @@
 import type { Member, Priority } from "@/types/common";
 
-export type TaskStatus = "todo" | "in-progress" | "in-review" | "completed";
 
 export interface Task {
   id: number;
@@ -13,4 +12,14 @@ export interface Task {
   members: Member[];
   comments: number;
   date: string;
+  projectId?:number;
+}
+export const TASK_STATUSES = ["todo", "in-progress", "in-review", "completed"] as const
+export type TaskStatus = (typeof TASK_STATUSES)[number]
+
+export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
+  todo: "To-do",
+  "in-progress": "In Progress",
+  "in-review": "In Review",
+  completed: "Completed",
 }

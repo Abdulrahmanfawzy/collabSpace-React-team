@@ -9,6 +9,7 @@ interface ProfileHeaderProps {
   onTabChange: (tab: ProfileTab) => void;
   name?: string;
   role?: string;
+  avatar?: string;
   joinedDate?: string;
   completedTasks?: number;
   hoursWorked?: number;
@@ -19,6 +20,7 @@ const ProfileHeader = ({
   onTabChange,
   name = "Mohamed Salah",
   role = "UI/UX Designer",
+  avatar,
   joinedDate = "Joind Apr 2022",
   completedTasks = 140,
   hoursWorked = 345,
@@ -37,7 +39,7 @@ const ProfileHeader = ({
         <div className="flex items-center gap-4">
           <div className="relative">
             <img
-              src={avtar}
+              src={avatar || avtar}
               alt={name}
               className="size-18 md:size-20 rounded-full object-cover border-2 border-white shadow-xs"
             />

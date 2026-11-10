@@ -1,4 +1,3 @@
-
 import {
   Navigate,
   RouterProvider,
@@ -6,22 +5,17 @@ import {
 } from "react-router-dom";
 import { Toaster } from "sonner";
 
-
-
 import ProjectsPage from "./app/router/pages/projects-page";
 import ProjectDetailsPage from "./app/router/pages/project-details-page";
 import TasksPage from "./app/router/pages/tasks-page";
 import ReportsPage from "./features/reports/ReportsPage";
-import CalendarPage from "./app/router/pages/CalendarPage";
-import MettingDetailsPage from "./app/router/pages/MettingDetailsPage";
-
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
 import ProfilePage from "./app/router/pages/profile-page";
 import ProfileSettingsPage from "./app/router/pages/profile-settings-page";
-import {MainLayout} from './components/layout/MainLayout';
-
+import MainLayout from "./components/layout/MainLayout";
+import PersonChatPage from "./app/router/pages/chat-page";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/reports",
         element: <ReportsPage />,
+      },
+      {
+        path: "/chats",
+        element: <PersonChatPage />,
       },
       {
         path: "/profile",

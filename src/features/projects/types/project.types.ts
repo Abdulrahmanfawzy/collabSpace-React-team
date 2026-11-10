@@ -2,12 +2,7 @@ import type { Member, Priority } from "@/types/common"
 
 export type ProjectColor = "purple" | "teal";
 
-// export type ProjectStatus =
-//   | "Pending"
-//   | "In Progress"
-//   | "On Hold"
-//   | "Completed"
-//   | "Cancelled"
+
 
 export const PROJECT_STATUSES = [
   "Pending",
@@ -17,6 +12,11 @@ export const PROJECT_STATUSES = [
   "Cancelled",
 ] as const
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number]
+export interface ProjectTeamSummary {
+  id: number
+  name: string
+}
+
 export interface Project {
   id: number
   name: string
@@ -26,19 +26,21 @@ export interface Project {
   status: ProjectStatus
   priority: Priority
   filesCount: number
-  teams: Member[]
+  teams: ProjectTeamSummary[]
 }
+
 
 export interface ProjectDetails extends Project {
   description: string
   progress: number
-  projectType: string
   totalTasks: number
 }
 
 export interface TeamMember extends Member {
+  role?: string
   isLeader?: boolean
 }
+
 
 
 export interface ChartPoint {
@@ -52,4 +54,10 @@ export interface ProjectProgress {
   inProgress: number
   completed: number
   total: number
+}
+
+export interface ProjectOverview {
+  project: ProjectDetails
+  progress: ProjectProgress
+  members: TeamMember[]
 }

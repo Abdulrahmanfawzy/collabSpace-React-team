@@ -14,7 +14,7 @@ interface KanbanBoardProps {
 
 export function KanbanBoard({ tasks }: KanbanBoardProps) {
   return (
-    <div className="flex items-start gap-4 overflow-x-auto pb-4">
+    <div className=" block lg:flex items-start gap-4 overflow-x-auto pb-4 ">
       {columns.map(({ status, title }) => (
         <TaskColumn
           key={status}

@@ -1,24 +1,23 @@
-
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom";
 
 const NavbarLinks = () => {
-  const location = useLocation()
+  const location = useLocation();
 
   const links = [
     { text: "Dashboard", path: "/dashboard" },
     { text: "Projects", path: "/projects" },
+    { text: "Tasks", path: "/tasks" },
     { text: "Chats", path: "/chats" },
     { text: "Meetings", path: "/meetings" },
     { text: "Reports", path: "/reports" },
- 
-  ]
+  ];
 
   return (
     <ul className="flex gap-4.75 py-1 pl-1 pr-2 bg-background-main rounded-pill">
       {links.map((link) => {
         const isActive =
           location.pathname === link.path ||
-          (link.path !== "/" && location.pathname.startsWith(link.path))
+          (link.path !== "/" && location.pathname.startsWith(link.path));
 
         return (
           <li key={link.path}>
@@ -33,10 +32,10 @@ const NavbarLinks = () => {
               {link.text}
             </Link>
           </li>
-        )
+        );
       })}
     </ul>
-  )
-}
+  );
+};
 
-export default NavbarLinks
+export default NavbarLinks;

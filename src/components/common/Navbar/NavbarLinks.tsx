@@ -13,7 +13,7 @@ const NavbarLinks = () => {
   ];
 
   return (
-    <ul className="flex gap-4.75 py-1 pl-1 pr-2 bg-background-main rounded-pill">
+    <ul className="flex gap-2 px-2 py-2 bg-background-main rounded-pill">
       {links.map((link) => {
         const isActive =
           location.pathname === link.path ||
@@ -23,7 +23,7 @@ const NavbarLinks = () => {
           <li key={link.path}>
             <Link
               to={link.path}
-              className={`text-caption-small font-normal py-1 px-2.5 rounded-pill leading-4 transition duration-300 ${
+              className={`text-caption-small font-normal py-2 px-4 rounded-pill leading-4 transition duration-300 ${
                 isActive
                   ? "bg-primary-blue-500 text-white"
                   : "hover:bg-primary-blue-500 hover:text-white"

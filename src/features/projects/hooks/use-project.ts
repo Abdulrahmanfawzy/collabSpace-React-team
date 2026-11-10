@@ -12,11 +12,11 @@ export function useProjects(params: GetProjectsParams = {}) {
   return useQuery({
     queryKey: projectKeys.list(params),
     queryFn: () => getProjects(params),
-    placeholderData: keepPreviousData,
-    select: (res) => ({
-      projects: res.data.map(mapProjectListItem),
-      meta: res.meta,
-    }),
+    // placeholderData: keepPreviousData,
+    // select: (res) => ({
+    //   projects: res.data.map(mapProjectListItem),
+    //   meta: res.meta,
+    // }),
   })
 }
 

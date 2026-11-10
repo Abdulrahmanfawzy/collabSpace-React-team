@@ -1,4 +1,3 @@
-
 import {
   Navigate,
   RouterProvider,
@@ -6,56 +5,25 @@ import {
 } from "react-router-dom";
 import { Toaster } from "sonner";
 
-
-
 import ProjectsPage from "./app/router/pages/projects-page";
 import ProjectDetailsPage from "./app/router/pages/project-details-page";
 import TasksPage from "./app/router/pages/tasks-page";
 import ReportsPage from "./features/reports/ReportsPage";
-import CalendarPage from "./app/router/pages/CalendarPage";
-import MettingDetailsPage from "./app/router/pages/MettingDetailsPage";
-
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
-import MainLayout from './components/layout/MainLayout';
-
+import ProfilePage from "./app/router/pages/profile-page";
+import ProfileSettingsPage from "./app/router/pages/profile-settings-page";
+import MainLayout from "./components/layout/MainLayout";
+import PersonChatPage from "./app/router/pages/chat-page";
+import CalendaPage from "./app/router/pages/CalendarPage";
+import MeetingDetailsPage from "./app/router/pages/MeetingDetailsPage";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <MainLayout />,
-    children: [
-      {
-        index: true,
-        element: <Navigate to="/projects"  />,
-      },
-      {
-        path: "projects",
-        element: <ProjectsPage />,
-      },
-      {
-        path: "projects/:projectId",
-        element: <ProjectDetailsPage />,
-      },
-      {
-        path: "tasks",
-        element: <TasksPage />,
-      },
-      {
-        path: "meetings",
-        element: <CalendarPage />,
-      },
-      {
-        path: "meetings/:id",
-        element: <MettingDetailsPage />,
-      },
-      {
-        path: "reports",
-        element: <ReportsPage />,
-      },
-    ],
-  },
+  // {
+  //   path: "/",
+  //   element: <Navigate to="/sign-in" replace />,
+  // },
   {
     path: "/sign-in",
     element: <Login />,
@@ -67,6 +35,47 @@ const router = createBrowserRouter([
   {
     path: "/forgot-password",
     element: <ForgotPasswordPage />,
+  },
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/projects",
+        element: <ProjectsPage />,
+      },
+      {
+        path: "/projects/:projectId",
+        element: <ProjectDetailsPage />,
+      },
+      {
+        path: "/tasks",
+        element: <TasksPage />,
+      },
+      {
+        path: "/reports",
+        element: <ReportsPage />,
+      },
+      {
+        path: "/meetings",
+        element: <CalendaPage />,
+      },
+      {
+        path: "/meetings/:id",
+        element: <MeetingDetailsPage />,
+      },
+      {
+        path: "/chats",
+        element: <PersonChatPage />,
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
+      },
+      {
+        path: "/profile/settings",
+        element: <ProfileSettingsPage />,
+      },
+    ],
   },
 ]);
 

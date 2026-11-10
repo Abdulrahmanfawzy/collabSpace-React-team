@@ -11,6 +11,7 @@ const NavbarLinks = () => {
     { text: "Chats", path: "/chats" },
     { text: "Meetings", path: "/meetings" },
     { text: "Reports", path: "/reports" },
+    
   ]
 
   return (

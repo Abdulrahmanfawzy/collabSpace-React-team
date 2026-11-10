@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FileCheck, Loader2 } from "lucide-react";
+import { FileCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import ProfileHeader from "./ProfileHeader";
@@ -42,8 +42,47 @@ const ProfileView = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+      <div className="flex flex-col gap-6 animate-pulse">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="size-20 rounded-full bg-gray-200" />
+            <div className="flex flex-col gap-2">
+              <div className="h-7 w-48 rounded bg-gray-200" />
+              <div className="h-5 w-64 rounded bg-gray-200" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="w-[290px] h-[110px] rounded-2xl bg-gray-200" />
+            <div className="w-[290px] h-[110px] rounded-2xl bg-gray-200" />
+          </div>
+        </div>
+        <div className="flex gap-8 border-b border-gray-200 pb-3">
+          <div className="h-5 w-20 rounded bg-gray-200" />
+          <div className="h-5 w-16 rounded bg-gray-200" />
+          <div className="h-5 w-16 rounded bg-gray-200" />
+        </div>
+        <section className="p-6">
+          <div className="h-7 w-24 rounded bg-gray-200 mb-4" />
+          <div className="space-y-2">
+            <div className="h-4 w-full rounded bg-gray-200" />
+            <div className="h-4 w-5/6 rounded bg-gray-200" />
+            <div className="h-4 w-2/3 rounded bg-gray-200" />
+          </div>
+        </section>
+        <section className="p-6 w-[753px]">
+          <div className="h-7 w-40 rounded bg-gray-200 mb-4" />
+          <div className="flex flex-col">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
+              >
+                <div className="h-4 w-64 rounded bg-gray-200" />
+                <div className="h-4 w-20 rounded bg-gray-200" />
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     );
   }

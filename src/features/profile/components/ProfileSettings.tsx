@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import avtar from "@/assets/images/profile-avtar.svg";
-import { profileMockData } from "../data/profile.mock";
+import { getProfile, updateProfile } from "@/services/profile.service";
 
 const COUNTRIES = [
   { code: "+20", iso: "eg", name: "Egypt" },
@@ -104,9 +104,9 @@ const profileSettingsSchema = z.object({
 type ProfileSettingsFormData = z.infer<typeof profileSettingsSchema>;
 
 const ProfileSettings = () => {
-  const [avatarPreview, setAvatarPreview] = useState<string>(
-    profileMockData.avatar || avtar
-  );
+  const [avatarPreview, setAvatarPreview] = useState<string>(avtar);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
@@ -116,19 +116,53 @@ const ProfileSettings = () => {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<ProfileSettingsFormData>({
     resolver: zodResolver(profileSettingsSchema),
     defaultValues: {
-      fullName: profileMockData.name || "Mohamed Salah",
-      email: "Admin@Example.com",
-      phone: "+20 (123) 456-9878",
+      fullName: "",
+      email: "",
+      phone: "",
       availability: "Available",
-      jobTitle: "Senior UI/UX Designer",
-      experienceYears: "6 Years",
+      jobTitle: "",
+      experienceYears: "",
       currentProject: "CollabSpace – Web Platform",
     },
   });
+
+  useEffect(() => {
+    let mounted = true;
+    getProfile()
+      .then((response) => {
+        if (!mounted) return;
+        if (response.success) {
+          const user = response.data.user;
+          setAvatarPreview(user.avatar_url || avtar);
+          reset({
+            fullName: user.name || "",
+            email: user.email || "",
+            phone: user.phone || "",
+            availability: user.status || "Available",
+            jobTitle: user.job_title || "",
+            experienceYears: user.years_of_experience
+              ? `${user.years_of_experience} Years`
+              : "",
+            currentProject: "CollabSpace - Web Platform",
+          });
+        }
+      })
+      .catch(() => {
+        // keep defaults
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [reset]);
 
   const currentFullName = watch("fullName");
   const phoneValue = watch("phone");
@@ -149,14 +183,88 @@ const ProfileSettings = () => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setAvatarPreview(imageUrl);
-      toast.success("Profile photo updated successfully!");
+      setAvatarFile(file);
+      toast.success("Profile photo selected. Save to apply.");
     }
   };
 
-  const onSubmit = (data: ProfileSettingsFormData) => {
-    console.log("Updated Profile Data:", data);
-    toast.success("Profile updated successfully!");
+  const onSubmit = async (data: ProfileSettingsFormData) => {
+    try {
+      const formData = new FormData();
+      if (avatarFile) {
+        formData.append("avatar", avatarFile);
+      }
+      formData.append("job_title", data.jobTitle);
+      formData.append(
+        "years_of_experience",
+        String(parseInt(data.experienceYears, 10) || 0),
+      );
+      formData.append("phone", data.phone);
+
+      const response = await updateProfile(formData);
+      if (response.success) {
+        localStorage.setItem("username", data.fullName);
+        localStorage.setItem("job_title", data.jobTitle);
+        localStorage.setItem("avatar_url", avatarPreview);
+        toast.success(response.message || "Profile updated successfully!");
+      } else {
+        toast.error(response.message || "Failed to update profile.");
+      }
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message || "Failed to update profile. Please try again.";
+      toast.error(message);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-8 w-full pb-10 animate-pulse">
+        <div className="flex items-center gap-4">
+          <div className="size-20 rounded-full bg-gray-200" />
+          <div className="h-8 w-48 rounded bg-gray-200" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-3 space-y-2">
+            <div className="h-5 w-28 rounded bg-gray-200" />
+            <div className="h-4 w-40 rounded bg-gray-200" />
+          </div>
+          <div className="lg:col-span-9 bg-white rounded-2xl p-6 border border-gray-100 shadow-xs grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-5">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="flex flex-col gap-1.5">
+                <div className="h-3 w-24 rounded bg-gray-200" />
+                <div className="h-10 w-full rounded-xl bg-gray-200" />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-3 space-y-2">
+            <div className="h-5 w-24 rounded bg-gray-200" />
+            <div className="h-4 w-40 rounded bg-gray-200" />
+          </div>
+          <div className="lg:col-span-9 bg-white rounded-2xl p-6 border border-gray-100 shadow-xs flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <div className="h-3 w-20 rounded bg-gray-200" />
+                <div className="h-10 w-full rounded-xl bg-gray-200" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <div className="h-3 w-32 rounded bg-gray-200" />
+                <div className="h-10 w-full rounded-xl bg-gray-200" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <div className="h-3 w-36 rounded bg-gray-200" />
+              <div className="h-10 w-full rounded-xl bg-gray-200" />
+            </div>
+          </div>
+        </div>
+        <div className="h-11 w-full rounded-[1234px] bg-gray-200" />
+      </div>
+    );
+  }
 
   return (
     <form

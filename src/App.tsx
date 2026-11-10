@@ -20,10 +20,10 @@ import CalendaPage from "./app/router/pages/CalendarPage";
 import MeetingDetailsPage from "./app/router/pages/MeetingDetailsPage";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Navigate to="/sign-in" replace />,
-  },
+  // {
+  //   path: "/",
+  //   element: <Navigate to="/sign-in" replace />,
+  // },
   {
     path: "/sign-in",
     element: <Login />,

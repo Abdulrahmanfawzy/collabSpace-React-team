@@ -1,4 +1,5 @@
 import api from "@/lib/api";
+import { getToken } from "@/lib/auth";
 
 export interface ProfileUser {
   id: number;
@@ -72,10 +73,23 @@ export async function getProfile(): Promise<ProfileMeResponse> {
 }
 
 export async function updateProfile(formData: FormData): Promise<AuthLikeResponse> {
-  const response = await api.post("/api/v1/auth/profile", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return response.data;
+  const token = getToken();
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/api/v1/auth/profile`,
+    {
+      method: "POST",
+      headers: token
+        ? { Authorization: `Bearer ${token}`, Accept: "application/json" }
+        : { Accept: "application/json" },
+      body: formData,
+    },
+  );
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw { response: { data } };
+  }
+  return data as AuthLikeResponse;
 }
 
 export async function deleteAvatar(): Promise<AuthLikeResponse> {

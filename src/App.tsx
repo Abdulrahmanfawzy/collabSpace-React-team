@@ -12,19 +12,27 @@ import ReportsPage from "./features/reports/ReportsPage";
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
+import VerifyOtpPage from "./app/router/pages/verify-otp";
+import ResetPasswordPage from "./app/router/pages/reset-password";
 import ProfilePage from "./app/router/pages/profile-page";
 import ProfileSettingsPage from "./app/router/pages/profile-settings-page";
 import MainLayout from "./components/layout/MainLayout";
+import { ProtectedRoute } from "./app/router/guards/ProtectedRoute";
+import { isAuthenticated } from "./lib/auth";
 import PersonChatPage from "./app/router/pages/chat-page";
 import CalendaPage from "./app/router/pages/CalendarPage";
 import MeetingDetailsPage from "./app/router/pages/MeetingDetailsPage";
 import Dashboard from "./app/router/pages/dashboard-page";
 
+function RootRedirect() {
+  return <Navigate to={isAuthenticated() ? "/dashboard" : "/sign-in"} replace />;
+}
+
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   element: <Navigate to="/sign-in" replace />,
-  // },
+  {
+    path: "/",
+    element: <RootRedirect />,
+  },
   {
     path: "/sign-in",
     element: <Login />,
@@ -38,8 +46,19 @@ const router = createBrowserRouter([
     element: <ForgotPasswordPage />,
   },
   {
-    element: <MainLayout />,
+    path: "/verify-otp",
+    element: <VerifyOtpPage />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage />,
+  },
+  {
+    element: <ProtectedRoute />,
     children: [
+      {
+        element: <MainLayout />,
+        children: [
       {
         path: "/dashboard",
         element: <Dashboard />,
@@ -79,6 +98,8 @@ const router = createBrowserRouter([
       {
         path: "/profile/settings",
         element: <ProfileSettingsPage />,
+      },
+    ],
       },
     ],
   },

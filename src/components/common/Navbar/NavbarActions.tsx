@@ -4,6 +4,10 @@ import { Bell } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const NavbarActions = () => {
+  const username = localStorage.getItem("username") || "User";
+  const jobTitle = localStorage.getItem("job_title") || "";
+  const avatarUrl = localStorage.getItem("avatar_url") || "";
+
   return (
     <div className="flex items-center gap-6">
         
@@ -17,13 +21,13 @@ const NavbarActions = () => {
 
         <NavLink to={"/profile"} className="flex items-center gap-2 cursor-pointer">
             <p className="flex flex-col whitespace-nowrap font-medium text-caption-small items-end">
-                Mohamed Salah
+                {username}
                 <span className="text-text-secondary/80 font-medium">
-                    UI/UX
+                    {jobTitle}
                 </span>
             </p>
 
-            <img src={avtar} alt="profile avtar" />
+            <img src={avatarUrl || avtar} alt="profile avatar" />
         </NavLink>
     </div>
   )

@@ -1,6 +1,5 @@
 import { useState } from "react"
-import { Plus} from "lucide-react"
-import { Button } from "@/components/ui/button"
+
 
 import {
   Select,
@@ -10,16 +9,27 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ProjectsTable } from "@/features/projects/components/projects-table"
-import { projectsMock } from "@/features/projects/data/projects.mock"
+
 import SearchInput from "@/components/common/SearchInput"
 import { AddProjectDialog } from "@/features/projects/components/add-project-dialog"
+import { useProjects } from "@/features/projects/hooks/use-project"
+import { useDebounce } from "@/hooks/use-debounce"
 
 export default function ProjectsPage() {
-  const [search, setSearch] = useState("")
 
-  const filteredProjects = projectsMock.filter((project) =>
-    project.name.toLowerCase().includes(search.toLowerCase())
-  )
+ 
+  const [search, setSearch] = useState("")
+const debouncedSearch = useDebounce(search)
+
+
+ const { data, isLoading, error } = useProjects({
+    search: debouncedSearch || undefined,
+  })
+console.log({ data, isLoading, error })
+
+const projects = data?.projects ?? []
+  
+
 
   return (
     <div className="flex flex-col gap-6 p-6 ">
@@ -31,7 +41,7 @@ export default function ProjectsPage() {
       </div>
 
       <div className="flex items-center justify-between gap-4">
-        <SearchInput/>
+        <SearchInput  />
 
         <div className="flex gap-3">
           <Select defaultValue="all">
@@ -57,7 +67,9 @@ export default function ProjectsPage() {
       </div>
 
       
-      <ProjectsTable projects={filteredProjects} />
+     {isLoading && <p className="text-small text-secondary-gray-300">Loading...</p>}
+{error && <p className="text-small text-support-danger">Something went wrong</p>}
+{!isLoading && !error && <ProjectsTable projects={projects} />}
     </div>
   )
 }

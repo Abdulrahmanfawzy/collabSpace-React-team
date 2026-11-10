@@ -26,11 +26,12 @@ const inputVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface InputProps
-  extends Omit<React.ComponentProps<"input">, "size">,
+  extends
+    Omit<React.ComponentProps<"input">, "size">,
     VariantProps<typeof inputVariants> {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
@@ -60,7 +61,7 @@ function Input({
             inputVariants({ variant, size }),
             startIcon && "pl-11",
             endIcon && "pr-11",
-            className
+            className,
           )}
           {...props}
         />
@@ -82,5 +83,4 @@ function Input({
     />
   );
 }
-
 export { Input, inputVariants };

@@ -18,6 +18,7 @@ import MainLayout from "./components/layout/MainLayout";
 import PersonChatPage from "./app/router/pages/chat-page";
 import CalendaPage from "./app/router/pages/CalendarPage";
 import MeetingDetailsPage from "./app/router/pages/MeetingDetailsPage";
+import Dashboard from "./app/router/pages/dashboard-page";
 
 const router = createBrowserRouter([
   // {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
       {
         path: "/projects",
         element: <ProjectsPage />,

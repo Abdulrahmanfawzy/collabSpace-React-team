@@ -16,6 +16,8 @@ import ProfilePage from "./app/router/pages/profile-page";
 import ProfileSettingsPage from "./app/router/pages/profile-settings-page";
 import MainLayout from "./components/layout/MainLayout";
 import PersonChatPage from "./app/router/pages/chat-page";
+import CalendaPage from "./app/router/pages/CalendarPage";
+import MeetingDetailsPage from "./app/router/pages/MeetingDetailsPage";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +54,14 @@ const router = createBrowserRouter([
       {
         path: "/reports",
         element: <ReportsPage />,
+      },
+      {
+        path: "/meetings",
+        element: <CalendaPage />,
+      },
+      {
+        path: "/meetings/:id",
+        element: <MeetingDetailsPage />,
       },
       {
         path: "/chats",

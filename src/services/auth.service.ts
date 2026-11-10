@@ -1,5 +1,11 @@
 import api from "@/lib/api";
-import { setStoredUser, setToken } from "@/lib/auth";
+import {
+  clearAuth,
+  setStoredUser,
+  setToken,
+  RESET_EMAIL_KEY,
+  RESET_OTP_KEY,
+} from "@/lib/auth";
 
 export interface LoginResponseData {
   user: Record<string, unknown>;
@@ -67,4 +73,19 @@ export async function resetPassword(
     payload,
   );
   return response.data;
+}
+
+export async function logout(): Promise<void> {
+  try {
+    await api.post("/api/v1/auth/logout");
+  } catch {
+    // Clear local state even if the API call fails.
+  } finally {
+    clearAuth();
+    localStorage.removeItem("username");
+    localStorage.removeItem("avatar_url");
+    localStorage.removeItem("job_title");
+    localStorage.removeItem(RESET_EMAIL_KEY);
+    localStorage.removeItem(RESET_OTP_KEY);
+  }
 }

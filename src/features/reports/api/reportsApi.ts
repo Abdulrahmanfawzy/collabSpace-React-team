@@ -1,5 +1,5 @@
 
-import { axiosInstance } from "@/lib/axios";
+import api from "@/lib/api";
 
 import type {
   ApiResponse,
@@ -10,7 +10,7 @@ import type {
 } from "../types/reports.types";
 
 export const getTasksReport = async () => {
-  const response = await axiosInstance.get<ApiResponse<TasksReport>>(
+  const response = await api.get<ApiResponse<TasksReport>>(
     "/api/v1/reports/tasks"
   );
 
@@ -18,7 +18,7 @@ export const getTasksReport = async () => {
 };
 
 export const getProjectsReport = async () => {
-  const response = await axiosInstance.get<ApiResponse<ProjectsReport>>(
+  const response = await api.get<ApiResponse<ProjectsReport>>(
     "/api/v1/reports/projects"
   );
 
@@ -26,7 +26,7 @@ export const getProjectsReport = async () => {
 };
 
 export const getTeamsReport = async () => {
-  const response = await axiosInstance.get<ApiResponse<TeamsReport>>(
+  const response = await api.get<ApiResponse<TeamsReport>>(
     "/api/v1/reports/teams"
   );
 
@@ -34,7 +34,7 @@ export const getTeamsReport = async () => {
 };
 
 export const getUsersReport = async () => {
-  const response = await axiosInstance.get<ApiResponse<UserReport>>(
+  const response = await api.get<ApiResponse<UserReport>>(
     "/api/v1/reports/users"
   );
 
@@ -42,7 +42,7 @@ export const getUsersReport = async () => {
 };
 
 export const getUserReport = async (userId: number) => {
-  const response = await axiosInstance.get<ApiResponse<UserReport>>(
+  const response = await api.get<ApiResponse<UserReport>>(
     `/api/v1/reports/users/${userId}`
   );
 

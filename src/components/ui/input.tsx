@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const inputVariants = cva(
-  "flex w-full bg-[#F9FAFB] text-sm text-foreground transition-all outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+  "flex w-full bg-background text-sm text-foreground transition-all outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -12,7 +12,7 @@ const inputVariants = cva(
         outline:
           "border border-gray-300 rounded-xl focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary",
         error:
-          "border border-destructive rounded-xl text-destructive focus-visible:border-destructive focus-visible:ring-1 focus-visible:ring-destructive",
+          "border border-destructive text-destructive focus-visible:border-destructive focus-visible:ring-1 focus-visible:ring-destructive",
         filled:
           "border border-transparent bg-muted/50 rounded-xl focus-visible:bg-background focus-visible:border-blue-600 focus-visible:ring-1 focus-visible:ring-blue-600",
       },
@@ -45,6 +45,7 @@ function Input({
   endIcon,
   ...props
 }: InputProps) {
+
   if (startIcon || endIcon) {
     return (
       <div className="relative w-full flex items-center">

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import AuthDivider from "@/components/layout/AuthDivider";
+import { login } from "@/services/auth.service";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -49,13 +50,20 @@ const Login = () => {
 
   // Step 3: Handle Submit
   const onSubmit = async (data: LoginFormData) => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    console.log("Login Data:", data);
-    localStorage.setItem("user", JSON.stringify({ email: data.email }));
-    toast.success("Signed in successfully!");
-    navigate("/projects");
+    try {
+      const response = await login(data.email, data.password);
+      if (response.success) {
+        toast.success(response.message || "Signed in successfully!");
+        navigate("/dashboard");
+      } else {
+        toast.error(response.message || "Login failed");
+      }
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message || "Login failed. Please try again.";
+      toast.error(message);
+    }
   };
 
   return (

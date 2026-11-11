@@ -157,7 +157,7 @@
 
 @layer components{
   .max-w-custom{
-    @apply w-[1290px]
+    @apply w-322.5
   }
 
 }

@@ -8,74 +8,88 @@ import "@fullcalendar/react/skeleton.css";
 
 import MeetingCard from "./MeetingCard";
 import CalendarToolbar from "./CalendarToolbar";
-import { useNavigate } from "react-router-dom";
+import useGetMeetings from "../hooks/useGetMeetings";
+import { useEffect, useState } from "react";
+import type { TimeFilter } from "../types/meetings.types";
 
+interface Props {
+  setProjectId : (value : number) => void,
+  projectId: number
+}
 
-const meetings = [
-  {
-    id: "1",
-    title: "Weekly Team Sync",
-    start: "2026-11-06T09:00:00",
-    end: "2026-11-06T10:00:00",
-    extendedProps: {
-      status: "Upcoming",
-      meetingType: "Online",
-      members: [
-        { id: "1", avatar: "https://i.pravatar.cc/100?img=11" },
-        { id: "2", avatar: "https://i.pravatar.cc/100?img=12" },
-        { id: "3", avatar: "https://i.pravatar.cc/100?img=13" },
-        { id: "4", avatar: "https://i.pravatar.cc/100?img=14" },
-      ],
-    },
-  },
-  {
-    id: "2",
-    title: "Weekly Team Sync",
-    start: "2026-11-10T10:00:00",
-    end: "2026-11-10T11:00:00",
-    extendedProps: {
-      status: "Upcoming",
-      meetingType: "Online",
-      members: [
-        { id: "1", avatar: "https://i.pravatar.cc/100?img=11" },
-        { id: "2", avatar: "https://i.pravatar.cc/100?img=12" },
-        { id: "3", avatar: "https://i.pravatar.cc/100?img=13" },
-        { id: "4", avatar: "https://i.pravatar.cc/100?img=14" },
-      ],
-    },
-  },
-  {
-    id: "3",
-    title: "Weekly Team Sync",
-    start: "2026-11-07T10:00:00",
-    end: "2026-11-07T11:00:00",
-    extendedProps: {
-      status: "Incoming",
-      meetingType: "Online",
-      members: [
-        { id: "1", avatar: "https://i.pravatar.cc/100?img=11" },
-        { id: "2", avatar: "https://i.pravatar.cc/100?img=12" },
-        { id: "3", avatar: "https://i.pravatar.cc/100?img=13" },
-        { id: "4", avatar: "https://i.pravatar.cc/100?img=14" },
-      ],
-    },
-  },
-];
+const MeetingsCalendar = ({setProjectId , projectId} : Props) => {
 
-const MeetingsCalendar = () => {
+  const [filterTime , setFilterTime ] = useState<TimeFilter>("today")
+  
+
+  const { data, isLoading, isError, error } = useGetMeetings({
+    project_id: projectId || 2,
+    time_filter: filterTime,
+    per_page: 15,
+  });
+
+  const meetings = data?.data.data ?? [];
+
+  const calendarEvents = meetings.map((meeting) => ({
+    id: String(meeting.id),
+    title: meeting.title,
+    start: `${meeting.meeting_date}T${meeting.start_time}`,
+    end: `${meeting.meeting_date}T${meeting.end_time}`,
+    extendedProps: {
+      ...meeting,
+      participants: meeting.participants,
+    },
+  }));
+
+  useEffect(()=> {
+    console.log(filterTime , projectId)
+  } , [filterTime , projectId])
+
   const controller = useCalendarController();
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
+
+  if (isLoading) {
+  return <div>Loading meetings...</div>;
+}
+
+if (isError) {
+  return <div>{error.message}</div>;
+}
 
   return (
     <>
-      <CalendarToolbar controller={controller} />
+      <CalendarToolbar controller={controller} setFilterTime={setFilterTime} setProjectId={setProjectId} filterTime={filterTime} projectId={projectId}/>
 
       <div className="mt-10 mx-16 overflow-x-auto">
         <FullCalendar
           plugins={[themePlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridFiveDay"
 
+          slotMinTime="09:00:00"
+          slotMaxTime="24:00:00"
+          slotDuration="01:00:00"
+          slotMinHeight={137}
+          events={calendarEvents}
+          eventContent={(info) => (
+            <div className="bg-transparent py-4 px-3 flex justify-center items-center">
+              <MeetingCard info={info} />
+            </div>
+          )}
+          controller={controller}
+          headerToolbar={false}
+          slotHeaderFormat={{
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: false,
+          }}
+          slotHeaderInnerClass="w-38 h-34 flex justify-center items-center"
+          height="auto"
+          dayHeaderInnerClass="flex flex-col gap-0.5 items-center py-2 text-small font-medium"
+          allDaySlot={true}
+          allDayHeaderContent="Time"
+          allDayHeaderClass="absolute top-2 text-small font-medium flex justify-center items-center"
+          allDayHeaderInnerClass="px-2.5"
           views={{
             timeGridFiveDay: {
               type: "timeGrid",
@@ -103,37 +117,6 @@ const MeetingsCalendar = () => {
             },
           }}
 
-          eventClick={(info) => {
-            const meetingId = info.event.id;
-
-            navigate(`/meetings/${meetingId}`);
-          }}
-
-
-          slotMinTime="09:00:00"
-          slotMaxTime="17:00:00"
-          slotDuration="01:00:00"
-          slotMinHeight={137}
-          events={meetings}
-          eventContent={(info) => (
-            <div className="bg-transparent py-4 px-3 flex justify-center items-center">
-              <MeetingCard info={info} />
-            </div>
-          )}
-          controller={controller}
-          headerToolbar={false}
-          slotHeaderFormat={{
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: false,
-          }}
-          slotHeaderInnerClass="w-38 h-34 flex justify-center items-center"
-          height="auto"
-          dayHeaderInnerClass="flex flex-col gap-0.5 items-center py-2 text-small font-medium"
-          allDaySlot={true}
-          allDayHeaderContent="Time"
-          allDayHeaderClass="absolute top-2 text-small font-medium flex justify-center items-center"
-          allDayHeaderInnerClass="px-2.5"
           
           dayLaneDidMount={(info) => {
             const lane = info.el;
@@ -159,8 +142,13 @@ const MeetingsCalendar = () => {
               slotEnd.setHours(hour + 1);
 
               const hasMeeting = meetings.some((meeting) => {
-                const meetingStart = new Date(meeting.start);
-                const meetingEnd = new Date(meeting.end);
+                const meetingStart = new Date(
+                  `${meeting.meeting_date}T${meeting.start_time}`
+                );
+
+                const meetingEnd = new Date(
+                  `${meeting.meeting_date}T${meeting.end_time}`
+                );
 
                 return (
                   meetingStart < slotEnd &&
@@ -197,3 +185,7 @@ const MeetingsCalendar = () => {
 };
 
 export default MeetingsCalendar;
+
+
+
+

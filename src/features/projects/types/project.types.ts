@@ -5,7 +5,7 @@ export type ProjectColor = "purple" | "teal";
 
 
 export const PROJECT_STATUSES = [
-  "Pending",
+  "Planning",
   "In Progress",
   "On Hold",
   "Completed",
@@ -21,6 +21,7 @@ export interface Project {
   id: number
   name: string
   color: ProjectColor
+   description: string     
   startDate: string
   deadline: string
   status: ProjectStatus
@@ -31,7 +32,6 @@ export interface Project {
 
 
 export interface ProjectDetails extends Project {
-  description: string
   progress: number
   totalTasks: number
 }

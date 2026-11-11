@@ -51,8 +51,8 @@ export function TeamMembersCard({ members }: TeamMembersCardProps) {
 
             <span className="text-small">{member.name}</span>
 
-            {member.isLeader && (
-              <span className="text-caption text-secondary-gray-300">Leader</span>
+            {member.role && (
+              <span className="text-caption text-secondary-gray-300">{member.role}</span>
             )}
           </div>
         ))}

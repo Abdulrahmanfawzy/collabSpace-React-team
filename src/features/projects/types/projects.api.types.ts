@@ -1,4 +1,4 @@
-import type { ApiResponse, PaginationMeta } from "@/types/api"
+import type { ApiResponse } from "@/types/api"
 import type { Priority } from "@/types/common"
 import type { ProjectStatus } from "./project.types"
 
@@ -32,10 +32,20 @@ export interface ProjectListItemResponse {
   created_at: string
 }
 
-// meta 
-export type ProjectsListResponse = ApiResponse<ProjectListItemResponse[]> & {
-  meta?: PaginationMeta
+export interface ProjectsPageData {
+  data: ProjectListItemResponse[]
+  current_page: number
+  last_page: number
+  per_page: number
+  total: number
 }
+
+export type ProjectsListResponse = ApiResponse<ProjectsPageData>
+
+// meta 
+// export type ProjectsListResponse = ApiResponse<ProjectListItemResponse[]> & {
+//   meta?: PaginationMeta
+// }
 
 /* ---------- Project Overview ---------- */
 export interface ProjectOverviewData {

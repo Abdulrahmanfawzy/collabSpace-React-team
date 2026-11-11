@@ -2,7 +2,7 @@
 
 import type { Team, TeamColor } from "@/features/teams/types/team.types"
 import type { Project, ProjectColor, ProjectOverview } from "../types/project.types"
-import type { CreateProjectPayload, ProjectListItemResponse, ProjectOverviewData, ProjectTeamResponse } from "../types/projects.api.types"
+import type {UpdateProjectPayload, CreateProjectPayload, ProjectListItemResponse, ProjectOverviewData, ProjectTeamResponse } from "../types/projects.api.types"
 import type { CreateProjectValues } from "../schemas/project.schema"
 
 const PROJECT_COLORS: ProjectColor[] = ["purple", "teal"]
@@ -13,6 +13,7 @@ export function mapProjectListItem(p: ProjectListItemResponse): Project {
   return {
     id: p.id,
     name: p.name,
+     description: p.description ?? "",  
     color: PROJECT_COLORS[p.id % PROJECT_COLORS.length],
     startDate: p.start_date ?? "-",
     deadline: p.deadline ?? "-",
@@ -88,5 +89,30 @@ export function toCreateProjectPayload(values: CreateProjectValues): CreateProje
     priority: values.priority,
     status: values.status,
     teams: values.teams.map(Number),
+  }
+}
+const toDateInput = (d: string) => (d === "-" ? "" : d.slice(0, 10))
+
+export function mapProjectToForm(project: Project): CreateProjectValues {
+  return {
+    name: project.name,
+    description: project.description,
+    startDate: toDateInput(project.startDate),
+    deadline: toDateInput(project.deadline),
+    priority: project.priority,
+    status: project.status,
+    teams: project.teams.map((t) => String(t.id)),
+  }
+}
+
+
+export function toUpdateProjectPayload(values: CreateProjectValues): UpdateProjectPayload {
+  return {
+    name: values.name,
+    description: values.description || undefined,
+    start_date: values.startDate,
+    deadline: values.deadline,
+    priority: values.priority,
+    status: values.status,
   }
 }

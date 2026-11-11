@@ -2,21 +2,19 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { getProjectOverview } from "../api/get-project-overview"
 import { getProjectTeams } from "../api/get-project-teams"
 import { getProjects } from "../api/get-projects"
-
 import { mapProjectListItem, mapProjectOverview, mapProjectTeam } from "../mappers/project.mappers"
-import type { GetProjectsParams } from "../types/projects.api.types"
 import { projectKeys } from "../api/projects-keys"
-
+import type { GetProjectsParams } from "../types/projects.api.types"
 
 export function useProjects(params: GetProjectsParams = {}) {
   return useQuery({
     queryKey: projectKeys.list(params),
     queryFn: () => getProjects(params),
-    // placeholderData: keepPreviousData,
-    // select: (res) => ({
-    //   projects: res.data.map(mapProjectListItem),
-    //   meta: res.meta,
-    // }),
+    placeholderData: keepPreviousData,
+    select: (res) => ({
+  projects: res.data.data.map(mapProjectListItem),
+  total: res.data.total,
+}),
   })
 }
 

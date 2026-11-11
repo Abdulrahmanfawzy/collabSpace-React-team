@@ -12,12 +12,15 @@ const iconStyles: Record<ProjectColor, string> = {
   purple: "bg-support-purple/10 text-support-purple",
   teal: "bg-support-success/10 text-support-success",
 }
-
 interface ProjectsTableProps {
   projects: Project[]
+  onEdit?: (project: Project) => void
+  onDelete?: (project: Project) => void
+   canEdit: boolean;
+  canDelete: boolean;
 }
 
-export function ProjectsTable({ projects }: ProjectsTableProps) {
+export function ProjectsTable({ projects, onEdit, onDelete, canEdit, canDelete }: ProjectsTableProps) {
   const navigate = useNavigate()
 
   const columns: Column<Project>[] = [
@@ -45,12 +48,12 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
       ),
     },
     {
-  header: "Teams",
-  cell: (p) => (
-    <span className="block max-w-48 truncate text-secondary-gray-300">
-      {p.teams.length ? p.teams.map((t) => t.name).join(", ") : "-"}
-    </span>
-  ),
+      header: "Teams",
+      cell: (p) => (
+        <span className="block max-w-48 truncate text-secondary-gray-300">
+          {p.teams.length ? p.teams.map((t) => t.name).join(", ") : "-"}
+        </span>
+      ),
 },
     { header: "Priority", cell: (p) => <PriorityText priority={p.priority} /> },
   ]
@@ -61,6 +64,12 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
       data={projects}
       getRowKey={(p) => p.id}
       onRowClick={(p) => navigate(`/projects/${p.id}`)}
+       onEdit={onEdit}
+      onDelete={onDelete}
+      canEdit={canEdit}
+      canDelete={canDelete}
     />
   )
 }
+    
+  

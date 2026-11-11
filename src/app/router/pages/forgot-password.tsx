@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { forgotPassword } from "@/services/auth.service";
 
 /* Step 1: define zod validation schema for Forgot Password */
 const forgotPasswordSchema = z.object({
@@ -22,6 +23,7 @@ const forgotPasswordSchema = z.object({
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 const ForgotPasswordPage = () => {
+  const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
 
@@ -39,12 +41,22 @@ const ForgotPasswordPage = () => {
 
   // Step 3: Handle Submit
   const onSubmit = async (data: ForgotPasswordFormData) => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    setSubmittedEmail(data.email);
-    setIsSubmitted(true);
-    toast.success("Reset link sent to your email!");
+    try {
+      const response = await forgotPassword(data.email);
+      if (response.success) {
+        localStorage.setItem("reset_email", data.email);
+        setSubmittedEmail(data.email);
+        toast.success(response.message || "Reset code sent to your email!");
+        navigate("/verify-otp");
+      } else {
+        toast.error(response.message || "Failed to send reset code.");
+      }
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message || "Failed to send reset code. Please try again.";
+      toast.error(message);
+    }
   };
 
   return (

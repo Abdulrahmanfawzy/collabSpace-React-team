@@ -1,7 +1,6 @@
 import SearchInput from "@/components/common/SearchInput";
 import { Button } from "@/components/ui/button";
 import { KanbanBoard } from "@/features/tasks/components/kanban-board";
-import { tasksMock } from "@/features/tasks/data/tasks.mock";
 import {
   Select,
   SelectContent,
@@ -12,6 +11,10 @@ import {
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { CreateTaskDialog } from "@/features/tasks/components/create-task-dialog";
+import { useTasks } from "@/features/tasks/hooks/use-tasks";
+import { EmptyState } from "@/components/common/empty-state";
+import { ProjectsLoading } from "@/components/skeleton/loading";
+
 
 const projectOptions = [
   { value: "1", label: "Alpha" },
@@ -22,15 +25,37 @@ export default function TasksPage() {
   const [projectFilter, setProjectFilter] = useState("all");
   const [scope, setScope] = useState("mine");
 
-  const filteredTasks = tasksMock.filter((task) => {
-    const matchesSearch = task.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    const matchesProject =
-      projectFilter === "all" || task.projectId === Number(projectFilter);
-    return matchesSearch && matchesProject;
-  });
 
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+const userId = user?.id;
+const {
+  data,
+  isLoading,
+  isError,
+} = useTasks({
+  project_id:
+    projectFilter === "all" ? undefined : Number(projectFilter),
+  assigned_to: scope === "mine" ? userId : undefined,
+});
+
+const filteredTasks = (data?.tasks ?? []).filter((task) =>
+  task.title.toLowerCase().includes(search.toLowerCase())
+);
+
+
+
+if (isLoading) return <ProjectsLoading />;
+
+if (isError) return <p className="p-6 text-support-danger">Failed to load tasks</p>;
+
+if (filteredTasks.length === 0) {
+  return (
+    <EmptyState
+      title="No Tasks Yet"
+      description="You don't have any tasks assigned to you yet. Once a task is assigned, it will appear here."
+    />
+  );
+}
   return (
     <>
       <div className="p-6">

@@ -12,6 +12,8 @@ import { useCreateMeeting } from "../hooks/useCreateMeeting";
 import { useUsers } from "../hooks/useUsers";
 import type { CreateMeetingPayload } from "../types/meetings.types";
 import { calculateEndTime } from "../utils/calculateEndTime";
+import { hasPermission, type UserRole } from "@/features/auth/constants/permissions";
+import { getStoredUser } from "@/lib/auth";
 
 
 
@@ -26,7 +28,13 @@ const MeetingsHeader = ({ projectId }: MeetingsHeaderProps) => {
 
   const { mutateAsync, isPending } = useCreateMeeting();
 
-  const { data: users = [], isLoading: isUsersLoading } = useUsers();
+  const { data, isLoading: isUsersLoading } = useUsers();
+
+  const users = data?.data ?? [];
+
+  console.log("API Response:", data);
+  console.log("Users:", users);
+  console.log("Is Array:", Array.isArray(users));
 
   const handleCreateMeeting = async (data: MeetingFormValues) => {
 
@@ -48,27 +56,44 @@ const MeetingsHeader = ({ projectId }: MeetingsHeaderProps) => {
     try {
       await mutateAsync(payload);
       setIsOpen(false);
+      
     } 
     catch (error) {
       console.error("Failed to create meeting:", error);
     }
   };
 
+    // permissions
+    const user = getStoredUser() as {
+      roles: UserRole[];
+    } | null;
+
+    const role = user?.roles?.[0];
+
+    const canCreateMeeting = role
+      ? hasPermission(role, "meetings.create")
+      : false;
+
+  
+
   return (
     <>
-      <section className="ml-16 mr-16 mt-12 mb-10.5 flex items-center justify-between app-container">
+      <section className=" mt-12 mb-10.5 flex items-center justify-between">
         <h1 className="text-h4 font-semibold">
           Meetings
         </h1>
 
-        <Button
-          variant="primary"
-          onClick={() => setIsOpen(true)}
-          className="py-3 pl-5 flex items-center gap-2 text-white rounded-4xl cursor-pointer transition duration-300"
-        >
-          Add Meeting
-          <Plus className="size-4" />
-        </Button>
+        {
+          canCreateMeeting &&
+            <Button
+              variant="primary"
+              onClick={() => setIsOpen(true)}
+              className="py-3 pl-5 flex items-center gap-2 text-white rounded-4xl cursor-pointer transition duration-300"
+            >
+              Add Meeting
+              <Plus className="size-4" />
+            </Button>
+        }
       </section>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>

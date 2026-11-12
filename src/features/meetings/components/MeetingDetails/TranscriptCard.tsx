@@ -78,7 +78,7 @@ const TranscriptCard = ({
             <Button
               variant="ghost"
               size="icon"
-              className="size-6"
+              className="size-6 text-destructive"
               aria-label="Edit meeting"
               onClick={() => onDelete?.(id)}
             >
@@ -98,13 +98,15 @@ const TranscriptCard = ({
             rows={3}
           />
           <div className="flex gap-2">
-            <button
+            <Button
+              variant="ghost"
               onClick={handleSave}
               className="text-sm font-medium text-primary"
             >
               Save
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="ghost"
               onClick={() => {
                 setIsEditing(false);
                 setEditText(text);
@@ -112,7 +114,7 @@ const TranscriptCard = ({
               className="text-sm text-muted-foreground"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       ) : (

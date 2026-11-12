@@ -10,6 +10,8 @@ import { useState } from "react";
 import { useUpdateMeeting } from "../hooks/useUpdateMeeting";
 import type { UpdateMeetingPayload } from "../api/meetings-api";
 import useDeleteMeeting from "../hooks/useDeleteMeeting";
+import { hasPermission, type UserRole } from "@/features/auth/constants/permissions";
+import { getStoredUser } from "@/lib/auth";
 
 type MeetingEventProps = {
   info: EventDisplayInfo;
@@ -23,6 +25,21 @@ type MeetingMember = {
 
 const MeetingCard = ({ info }: MeetingEventProps) => {
   const navigate = useNavigate();
+
+  // permissions
+  const user = getStoredUser() as {
+    roles: UserRole[];
+  } | null;
+
+  const role = user?.roles?.[0];
+
+  const canUpdateMeeting = role
+    ? hasPermission(role, "meetings.update")
+    : false;
+
+  const canDeleteMeeting = role
+    ? hasPermission(role, "meetings.delete")
+    : false;
 
   const { participants } = info.event.extendedProps as {
     participants: MeetingMember[];
@@ -79,7 +96,7 @@ const MeetingCard = ({ info }: MeetingEventProps) => {
     <>
       <div
         onClick={handleCardClick}
-        className="flex max-h-27 w-50 flex-col gap-4 rounded-4xl bg-white p-3 pb-10 cursor-pointer hover:shadow-md transition"
+        className="flex w-50 flex-col gap-2 rounded-4xl bg-white p-3 h-26 cursor-pointer hover:shadow-md transition"
       >
         {/* Meeting Header */}
         <div className="flex items-start justify-between gap-2">
@@ -87,27 +104,35 @@ const MeetingCard = ({ info }: MeetingEventProps) => {
             {info.event.title}
           </h3>
 
-          <div className="flex shrink-0 items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-6"
-              aria-label="Edit meeting"
-              onClick={handleEditClick}
-            >
-              <Pencil className="size-3.5" />
-            </Button>
+            {(canUpdateMeeting || canDeleteMeeting) && (
+              <div className="flex shrink-0 items-center gap-1">
+                {canUpdateMeeting && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6"
+                    aria-label="Edit meeting"
+                    onClick={handleEditClick}
+                  >
+                    <Pencil className="size-3.5" />
+                  </Button>
+                )}
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-6 text-destructive"
-              aria-label="Delete meeting"
-              onClick={handleDeleteMeeting}
-            >
-              <Trash2 className="size-3.5" />
-            </Button>
-          </div>
+                {canDeleteMeeting && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6 text-destructive"
+                    aria-label="Delete meeting"
+                    onClick={handleDeleteMeeting}
+                    disabled={isDeleting}
+                  >
+                    <Trash2 className="size-3.5" />
+                  </Button>
+                )}
+              </div>
+            )}
+          
         </div>
 
         {/* Meeting Date */}
@@ -137,7 +162,7 @@ const MeetingCard = ({ info }: MeetingEventProps) => {
 
           <Button
             size="sm"
-            className="h-7 gap-1 rounded-full px-3 text-sm bg-transparent text-black/70"
+            className="h-7 gap-1 rounded-full px-3 text-sm bg-transparent cursor-pointer text-black/70 hover:text-white"
             onClick={(e) => e.stopPropagation()}
           >
             Join

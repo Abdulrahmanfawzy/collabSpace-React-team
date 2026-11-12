@@ -16,7 +16,7 @@ import {
 import type { User } from "../api/users-api";
 
 
-// ==================== Schema ====================
+//  Schema 
 
 export const meetingSchema = z.object({
   subject: z.string().trim()
@@ -48,7 +48,7 @@ export type updateMeetingValues = z.infer<typeof updateMeetingSchema>;
 type MeetingFormValues = createMeetingValues | updateMeetingValues;
 
 
-// ==================== Props ====================
+//  Props 
 
 interface MeetingFormProps {
   onClose?: () => void;
@@ -62,7 +62,7 @@ interface MeetingFormProps {
 }
 
 
-// ==================== Component ====================
+//  Component 
 
 export default function MeetingForm({
   onClose,
@@ -114,7 +114,7 @@ export default function MeetingForm({
 
   const participants = watch("participants");
 
-  // ==================== Add Participant ====================
+  //  Add Participant 
 
   const handleAddGuest = () => {
     // check search value is empty or no
@@ -140,14 +140,14 @@ export default function MeetingForm({
     setGuestInput("");
   };
 
-  // ==================== Remove Participant ====================
+  //  Remove Participant 
 const handleRemoveGuest = (userId: number) => {
     setValue("participants", participants.filter((id) => id !== userId),
       { shouldValidate: true, shouldDirty: true }
     );
   };
 
-  // ==================== Submit ====================
+  //  Submit 
 
   const handleFormSubmit = async (data: createMeetingValues) => {
     try {

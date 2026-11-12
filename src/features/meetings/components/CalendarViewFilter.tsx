@@ -30,7 +30,11 @@ const CalendarViewFilter = ({
     { label: "Past", value: "past" },
   ];
 
-  const { data } = useGetProjects();
+const { data, isLoading, error } = useGetProjects();
+
+console.log("Projects Response:", data);
+console.log("Projects Loading:", isLoading);
+console.log("Projects Error:", error);
 
   const projects: Project[] = data?.data?.data ?? [];
 
@@ -42,17 +46,11 @@ const CalendarViewFilter = ({
         value={`${projectId}`}
         onValueChange={(value) => setProjectId(Number(value))}
       >
-        <SelectTrigger className="bg-transparent gap-2.5 py-2.5 pr-2.5 pl-3 border border-black rounded-4xl">
+        <SelectTrigger className="bg-transparent gap-2.5 py-2.5 pr-2.5 pl-3 rounded-pill border border-black ">
           <SelectValue placeholder="Select Project" />
         </SelectTrigger>
 
         <SelectContent>
-            {/* <SelectItem
-              key={"all"}
-              value={''}
-            >
-              {"all"}
-            </SelectItem> */}
           {projects.map((project) => (
             <SelectItem
               key={project.id}
@@ -69,7 +67,7 @@ const CalendarViewFilter = ({
       value={filterTime}
         onValueChange={(value) => setFilterTime(value as TimeFilter)}
       >
-        <SelectTrigger className="bg-transparent gap-2.5 py-2.5 pr-2.5 pl-3 border border-black rounded-4xl">
+        <SelectTrigger className="bg-transparent gap-2.5 py-2.5 pr-2.5 pl-3 border border-black rounded-pill">
           <SelectValue placeholder="Select Time" />
         </SelectTrigger>
 

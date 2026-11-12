@@ -47,7 +47,6 @@ const MeetingsCalendar = ({setProjectId , projectId} : Props) => {
 
   const controller = useCalendarController();
 
-  // const navigate = useNavigate()
 
   if (isLoading) {
   return <div>Loading meetings...</div>;
@@ -58,10 +57,10 @@ if (isError) {
 }
 
   return (
-    <>
+    <div className="">
       <CalendarToolbar controller={controller} setFilterTime={setFilterTime} setProjectId={setProjectId} filterTime={filterTime} projectId={projectId}/>
 
-      <div className="mt-10 mx-16 overflow-x-auto">
+      <div className="mt-10">
         <FullCalendar
           plugins={[themePlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridFiveDay"
@@ -180,7 +179,7 @@ if (isError) {
           
         />
       </div>
-    </>
+    </div>
   );
 };
 

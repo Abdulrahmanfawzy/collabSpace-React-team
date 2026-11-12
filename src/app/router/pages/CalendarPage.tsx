@@ -3,7 +3,7 @@ import MeetingsHeader from '@/features/meetings/components/MeetingsHeader'
 import { useState } from 'react'
 
 const CalendaPage = () => {
-  const [projectId , setProjectId ] = useState(1)
+  const [projectId , setProjectId ] = useState(0)
 
   return (
     <div className='app-container'>

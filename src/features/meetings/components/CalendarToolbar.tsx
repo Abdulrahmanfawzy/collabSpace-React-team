@@ -16,7 +16,7 @@ type CalendarToolbarProps = {
 const CalendarToolbar = ({controller ,setFilterTime , setProjectId , projectId , filterTime} : CalendarToolbarProps) => {
 
   return (
-    <section className="flex items-center gap-8 ml-16 mr-16 mb-10">
+    <section className="flex items-center gap-8 mb-10">
 
         {/* Month Navigation */}
         <div className="flex items-center gap-4 grow">

@@ -32,7 +32,9 @@ export function getStoredUser(): unknown {
 export function setStoredUser(user: unknown): void {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
 }
-
+export function getCurrentUser() {
+  return getStoredUser();
+}
 export function clearAuth(): void {
   removeToken();
   localStorage.removeItem(USER_KEY);

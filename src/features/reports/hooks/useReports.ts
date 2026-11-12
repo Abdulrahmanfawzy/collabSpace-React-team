@@ -9,31 +9,35 @@ import {
   getUserReport,
 } from "../api/reportsApi";
 
-export const useTasksReport = () => {
+export const useTasksReport = (enabled = true) => {
   return useQuery({
     queryKey: ["reports", "tasks"],
     queryFn: getTasksReport,
+    enabled,
   });
 };
 
-export const useProjectsReport = () => {
+export const useProjectsReport = (enabled = true) => {
   return useQuery({
     queryKey: ["reports", "projects"],
     queryFn: getProjectsReport,
+    enabled,
   });
 };
 
-export const useTeamsReport = () => {
+export const useTeamsReport = (enabled = true) => {
   return useQuery({
     queryKey: ["reports", "teams"],
     queryFn: getTeamsReport,
+    enabled,
   });
 };
 
-export const useUsersReport = () => {
+export const useUsersReport = (enabled = true) => {
   return useQuery({
     queryKey: ["reports", "users"],
     queryFn: getUsersReport,
+    enabled,
   });
 };
 

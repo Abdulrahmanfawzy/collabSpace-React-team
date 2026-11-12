@@ -3,7 +3,7 @@ import type { Priority } from "@/types/common"
 import type { ProjectStatus } from "../types/project.types"
 
 const statusStyles: Record<ProjectStatus, string> = {
-  Pending: "text-secondary-gray-300",
+  Planning: "text-secondary-gray-300",
   "In Progress": "text-primary-blue-500",
   "On Hold": "text-support-warning",
   Completed: "text-support-success",

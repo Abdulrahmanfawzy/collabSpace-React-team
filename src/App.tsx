@@ -30,9 +30,6 @@ function RootRedirect() {
   return <Navigate to={isAuthenticated() ? "/dashboard" : "/sign-in"} replace />;
 }
 
-function RootRedirect() {
-  return <Navigate to={isAuthenticated() ? "/dashboard" : "/sign-in"} replace />;
-}
 
 const router = createBrowserRouter([
   {
@@ -65,66 +62,66 @@ const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
-      {
-        path: "/dashboard",
-       element: (
-    <PermissionGuard permission="analytics.view">
-      <Dashboard />
-    </PermissionGuard>
-  ),
-      },
-      {
-        path: "/projects",
-        element: <ProjectsPage />,
-      },
-      {
-        path: "/projects/:projectId",
-        element: <ProjectDetailsPage />,
-      },
-      {
-        path: "/tasks",
-        element: <TasksPage />,
-      },
-      {
-  path: "/tasks/:taskId",
-  element: <TaskDetailsPage />,
-},
-      {
-        path: "/reports",
-        element: <ReportsPage />,
-      },
-      {
-        path: "/meetings",
-        element: <CalendaPage />,
-      },
-      {
-        path: "/meetings/:id",
-        element: <MeetingDetailsPage />,
-      },
-      {
-        path: "/chats",
-        element: <PersonChatPage />,
-      },
-      {
-        path: "/profile",
-        element: <ProfilePage />,
-      },
-      {
-        path: "/profile/settings",
-        element: <ProfileSettingsPage />,
-      },
-      {
-  path: "/forbidden",
-  element: <ForbiddenPage />,
-}
-    ],
-      },
-    ],
+          {
+            path: "/dashboard",
+            element: (
+              <PermissionGuard permission="analytics.view">
+                <Dashboard />
+              </PermissionGuard>
+            ),
+          },
+          {
+            path: "/projects",
+            element: <ProjectsPage />,
+          },
+          {
+            path: "/projects/:projectId",
+            element: <ProjectDetailsPage />,
+          },
+          {
+            path: "/tasks",
+            element: <TasksPage />,
+          },
+          {
+            path: "/tasks/:taskId",
+            element: <TaskDetailsPage />,
+          },
+          {
+            path: "/reports",
+            element: <ReportsPage />,
+          },
+          {
+            path: "/meetings",
+            element: <CalendaPage />,
+          },
+          {
+            path: "/meetings/:id",
+            element: <MeetingDetailsPage />,
+          },
+          {
+            path: "/chats",
+            element: <PersonChatPage />,
+          },
+          {
+            path: "/profile",
+            element: <ProfilePage />,
+          },
+          {
+            path: "/profile/settings",
+            element: <ProfileSettingsPage />,
+          },
+          {
+            path: "/forbidden",
+            element: <ForbiddenPage />,
+          },
+        ],
       },
     ],
   },
- 
 ]);
+ 
+ 
+
 
 function App() {
   return (

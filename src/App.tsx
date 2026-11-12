@@ -23,7 +23,9 @@ import PersonChatPage from "./app/router/pages/chat-page";
 import CalendaPage from "./app/router/pages/CalendarPage";
 import MeetingDetailsPage from "./app/router/pages/MeetingDetailsPage";
 import Dashboard from "./app/router/pages/dashboard-page";
-
+import { PermissionGuard } from "./components/common/permission-guard";
+import ForbiddenPage from "./app/router/pages/forbidden-page";
+import TaskDetailsPage from "./app/router/pages/task-details-page"
 function RootRedirect() {
   return <Navigate to={isAuthenticated() ? "/dashboard" : "/sign-in"} replace />;
 }
@@ -61,7 +63,11 @@ const router = createBrowserRouter([
         children: [
       {
         path: "/dashboard",
-        element: <Dashboard />,
+       element: (
+    <PermissionGuard permission="analytics.view">
+      <Dashboard />
+    </PermissionGuard>
+  ),
       },
       {
         path: "/projects",
@@ -75,6 +81,10 @@ const router = createBrowserRouter([
         path: "/tasks",
         element: <TasksPage />,
       },
+      {
+  path: "/tasks/:taskId",
+  element: <TaskDetailsPage />,
+},
       {
         path: "/reports",
         element: <ReportsPage />,
@@ -99,6 +109,10 @@ const router = createBrowserRouter([
         path: "/profile/settings",
         element: <ProfileSettingsPage />,
       },
+      {
+  path: "/forbidden",
+  element: <ForbiddenPage />,
+}
     ],
       },
     ],

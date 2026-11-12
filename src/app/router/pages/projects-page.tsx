@@ -46,7 +46,11 @@ const canDeleteProject = hasPermission(role, "projects.delete");
       </div>
 
       <div className="flex items-center justify-between gap-4">
-        <SearchInput  />
+        <SearchInput   placeholder="Search..."
+  width="w-1/2"
+  style="bg-white pl-10"
+  iconStyle="left-3 text-gray-400"
+  paramKey="search" />
 
         <div className="flex gap-3">
           <Select defaultValue="all">

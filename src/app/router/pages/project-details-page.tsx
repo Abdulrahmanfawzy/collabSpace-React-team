@@ -13,6 +13,7 @@ import { filesMock } from "@/features/files/data/files.mock"
 import { useProjectOverview } from "@/features/projects/hooks/use-project"
 import { ProjectTeamsPanel } from "@/features/projects/components/project-team-panel"
 import { useTasks } from "@/features/tasks/hooks/use-tasks"
+import { ProjectsLoading } from "@/components/skeleton/loading"
 
 function ProjectDetailsPage() {
   const { projectId } = useParams();
@@ -63,7 +64,7 @@ function ProjectDetailsPage() {
 
         <TabsContent value="tasks" className="mt-6">
          {tasksLoading ? (
-  <p>Loading tasks...</p>
+ <ProjectsLoading/>
 ) : tasksError ? (
   <p>Failed to load tasks</p>
 ) : (

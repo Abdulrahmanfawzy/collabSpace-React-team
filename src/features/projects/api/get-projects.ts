@@ -7,5 +7,14 @@ import type { GetProjectsParams, ProjectsListResponse } from "../types/projects.
 export async function getProjects(params: GetProjectsParams = {}) {
   const { data } = await apiClient.get<ProjectsListResponse>("/projects", { params })
   console.log("projects raw:", data) 
+console.log(
+  data.data.data.map((project) => ({
+    id: project.id,
+    name: project.name,
+  }))
+)
+  
   return data
 }
+
+

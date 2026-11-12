@@ -24,9 +24,10 @@ import type {
 export const getMeetings = async (
   filters: Filters
 ): Promise<MeetingsResponse> => {
-  const { data } = await api.get<MeetingsResponse>("/meetings", {
+  const { data } = await api.get<MeetingsResponse>("/api/v1/meetings", {
     params: filters,
   });
+  console.log(data)
   return data;
 };
 
@@ -34,7 +35,7 @@ export const getMeetings = async (
 export const createMeeting = async (
   data: CreateMeetingPayload
 ) => {
-  const response = await api.post("/meetings", data);
+  const response = await api.post("/api/v1/meetings", data);
 
   return response.data;
 };
@@ -52,14 +53,14 @@ export const updateMeeting = async ({
   id,
   ...payload
 }: UpdateMeetingPayload & { id: number }) => {
-  const { data } = await api.put(`/meetings/${id}`, payload);
+  const { data } = await api.put(`/api/v1/meetings/${id}`, payload);
 
   return data;
 };
 
 // Delete Meeting
 export const deleteMeeting = async (id: number) => {
-  const { data } = await api.delete(`/meetings/${id}`);
+  const { data } = await api.delete(`/api/v1/meetings/${id}`);
 
   return data;
 };
@@ -69,7 +70,7 @@ export const getMeetingDetails = async (
   id: number
 ): Promise<ApiResponse<MeetingDetails>> => {
   const { data } = await api.get<ApiResponse<MeetingDetails>>(
-    `/meetings/${id}`
+    `/api/v1/meetings/${id}`
   );
 
   return data;
@@ -80,7 +81,7 @@ export const getMeetingSummary = async (
   id: number
 ): Promise<ApiResponse<MeetingSummary>> => {
   const { data } = await api.get<ApiResponse<MeetingSummary>>(
-    `/meetings/${id}/summary`
+    `/api/v1/meetings/${id}/summary`
   );
 
   return data;
@@ -92,7 +93,7 @@ export const generateMeetingSummary = async (
   payload: GenerateSummaryPayload
 ): Promise<ApiResponse<MeetingSummary>> => {
   const { data } = await api.post<ApiResponse<MeetingSummary>>(
-    `/meetings/${id}/summary/generate`,
+    `/api/v1/meetings/${id}/summary/generate`,
     payload
   );
 
@@ -105,7 +106,7 @@ export const updateMeetingSummary = async (
   payload: UpdateSummaryPayload
 ): Promise<ApiResponse<MeetingSummary>> => {
   const { data } = await api.put<ApiResponse<MeetingSummary>>(
-    `/meetings/${id}/summary`,
+    `/api/v1/meetings/${id}/summary`,
     payload
   );
 
@@ -117,21 +118,21 @@ export const createTasksFromSummary = async (
   id: number
 ): Promise<ApiResponse<CreateTasksFromSummaryResponse>> => {
   const { data } = await api.post<ApiResponse<CreateTasksFromSummaryResponse>>(
-    `/meetings/${id}/summary/create-tasks`,
+    `/api/v1/meetings/${id}/summary/create-tasks`,
     {}
   );
-
+  console.log(data)
   return data;
 };
 
 
 
-// ====================== Meeting Notes ======================
+// Meeting Notes
 
 export const getMeetingNotes = async (
   meetingId: number
 ): Promise<ApiResponse<MeetingNote[]>> => {
-  const { data } = await api.get<ApiResponse<MeetingNote[]>>(`/meetings/${meetingId}/notes`);
+  const { data } = await api.get<ApiResponse<MeetingNote[]>>(`/api/v1/meetings/${meetingId}/notes`);
   return data;
 };
 
@@ -139,7 +140,7 @@ export const createMeetingNote = async (
   meetingId: number,
   payload: CreateNotePayload
 ): Promise<ApiResponse<MeetingNote>> => {
-  const { data } = await api.post<ApiResponse<MeetingNote>>(`/meetings/${meetingId}/notes`,
+  const { data } = await api.post<ApiResponse<MeetingNote>>(`/api/v1/meetings/${meetingId}/notes`,
     payload
   );
   return data;
@@ -150,7 +151,7 @@ export const updateMeetingNote = async (
   noteId: number,
   payload: UpdateNotePayload
 ): Promise<ApiResponse<MeetingNote>> => {
-  const { data } = await api.put<ApiResponse<MeetingNote>>(`/meetings/${meetingId}/notes/${noteId}`,
+  const { data } = await api.put<ApiResponse<MeetingNote>>(`/api/v1/meetings/${meetingId}/notes/${noteId}`,
     payload
   );
   return data;
@@ -160,17 +161,17 @@ export const deleteMeetingNote = async (
   meetingId: number,
   noteId: number
 ): Promise<ApiResponse<null>> => {
-  const { data } = await api.delete<ApiResponse<null>>( `/meetings/${meetingId}/notes/${noteId}`);
+  const { data } = await api.delete<ApiResponse<null>>( `/api/v1/meetings/${meetingId}/notes/${noteId}`);
   return data;
 };
 
-// ====================== Meeting Comments (Transcripts) ======================
+// Meeting Comments (Transcripts)
 
 export const getMeetingComments = async (
   meetingId: number
 ): Promise<MeetingCommentsResponse> => {
   const { data } = await api.get<MeetingCommentsResponse>(
-    `/meetings/${meetingId}/comments`
+    `/api/v1/meetings/${meetingId}/comments`
   );
 
   return data;
@@ -181,7 +182,7 @@ export const createMeetingComment = async (
   meetingId: number,
   payload: CreateCommentPayload
 ): Promise<ApiResponse<MeetingComment>> => {
-  const { data } = await api.post<ApiResponse<MeetingComment>>(`/meetings/${meetingId}/comments`,
+  const { data } = await api.post<ApiResponse<MeetingComment>>(`/api/v1/meetings/${meetingId}/comments`,
     payload
   );
   return data;
@@ -192,13 +193,13 @@ export const updateMeetingComment = async (
   commentId: number,
   payload: UpdateCommentPayload
 ): Promise<ApiResponse<MeetingComment>> => {
-  const { data } = await api.put<ApiResponse<MeetingComment>>(`/meetings/${meetingId}/comments/${commentId}`,
+  const { data } = await api.put<ApiResponse<MeetingComment>>(`/api/v1/meetings/${meetingId}/comments/${commentId}`,
     payload
   );
   return data;
 };
 
 export const deleteMeetingComment = async ( meetingId: number, commentId: number): Promise<ApiResponse<null>> => {
-  const { data } = await api.delete<ApiResponse<null>>(`/meetings/${meetingId}/comments/${commentId}`);
+  const { data } = await api.delete<ApiResponse<null>>(`/api/v1/meetings/${meetingId}/comments/${commentId}`);
   return data;
 };

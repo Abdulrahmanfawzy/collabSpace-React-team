@@ -22,11 +22,12 @@ interface UsersResponse {
 }
 
 export const getUsers = async (): Promise<UsersResponse> => {
-  const { data } = await api.get<UsersResponse>("/users", {
+  const { data } = await api.get<UsersResponse>("/api/v1/users", {
     params: {
       per_page: 15,
     },
   });
 
+  console.log(data)
   return data;
 };

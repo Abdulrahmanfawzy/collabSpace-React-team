@@ -1,6 +1,14 @@
 
 import type { ReactNode } from "react";
 
+import { getStoredUser } from "@/lib/auth";
+
+import {
+  ROLE_PERMISSIONS,
+  hasPermission,
+  type UserRole,
+} from "@/features/auth/constants/permissions";
+
 import StatCard from "./components/StatCard";
 import ReportForm from "./components/ReportForm";
 
@@ -14,9 +22,10 @@ import {
   useTasksReport,
   useProjectsReport,
   useTeamsReport,
+  useUserReport,
 } from "./hooks/useReports";
 
-// Reusable component for each report section
+// Reusable report section
 type ReportSectionProps = {
   isLoading: boolean;
   isError: boolean;
@@ -65,137 +74,306 @@ const ReportSection = ({
 };
 
 const ReportsPage = () => {
+  // Get logged-in user
+  const storedUser = getStoredUser() as {
+    id?: number | string;
+    roles?: unknown;
+  } | null;
+
+  // Backend returns roles as an array
+  const userRoles = Array.isArray(storedUser?.roles)
+    ? storedUser.roles
+    : [];
+
+  // Find a valid role from central permissions
+  const userRole = userRoles.find(
+    (role): role is UserRole =>
+      typeof role === "string" &&
+      Object.prototype.hasOwnProperty.call(ROLE_PERMISSIONS, role)
+  );
+
+  // Check permissions
+  const canViewAllReports = userRole
+    ? hasPermission(userRole, "reports.view-all")
+    : false;
+
+  const canViewAnalytics = userRole
+    ? hasPermission(userRole, "analytics.view")
+    : false;
+
+  const canGenerateReports = userRole
+    ? hasPermission(userRole, "reports.generate")
+    : false;
+
+  const canViewPersonalReports = userRole
+    ? hasPermission(userRole, "reports.view-personal")
+    : false;
+
+  // Determine access
+  const canViewProjectReports =
+    canViewAllReports || canViewAnalytics;
+
+  const shouldFetchPersonalReport =
+    canViewPersonalReports && !canViewAllReports;
+
+  // Current user ID
+  const userId = Number(storedUser?.id) || 0;
+
+  // Administrator: Tasks report
   const {
     data: tasks,
     isPending: tasksLoading,
     isError: tasksError,
     error: tasksErrorMessage,
     refetch: refetchTasks,
-  } = useTasksReport();
+  } = useTasksReport(canViewAllReports);
 
+  // Administrator and Project Manager: Projects report
   const {
     data: projects,
     isPending: projectsLoading,
     isError: projectsError,
     error: projectsErrorMessage,
     refetch: refetchProjects,
-  } = useProjectsReport();
+  } = useProjectsReport(canViewProjectReports);
 
+  // Administrator: Teams report
   const {
     data: teams,
     isPending: teamsLoading,
     isError: teamsError,
     error: teamsErrorMessage,
     refetch: refetchTeams,
-  } = useTeamsReport();
+  } = useTeamsReport(canViewAllReports);
+
+  // Team Member: Personal report
+  const {
+    data: personalReport,
+    isPending: personalLoading,
+    isError: personalError,
+    error: personalErrorMessage,
+    refetch: refetchPersonal,
+  } = useUserReport(
+    shouldFetchPersonalReport ? userId : 0
+  );
+
+  // No valid role
+  if (!userRole) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#F5F7FA] p-5">
+        <p className="text-center text-gray-600">
+          Unable to identify your role. Please sign in again.
+        </p>
+      </main>
+    );
+  }
+
+  // Team Member: Personal Statistics
+  // Uses the existing StatCard design, without creating a new dashboard.
+  if (shouldFetchPersonalReport) {
+    return (
+      <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#F5F7FA] px-1 py-4 sm:px-6 lg:px-8 lg:py-8">
+        <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-5">
+          <ReportSection
+            isLoading={personalLoading}
+            isError={personalError || !personalReport}
+            error={personalErrorMessage}
+            onRetry={() => {
+              void refetchPersonal();
+            }}
+          >
+            {personalReport && (
+              <section className="grid grid-cols-3 gap-2 sm:gap-5">
+                <StatCard
+                  title="Assigned Tasks"
+                  value={String(personalReport.tasks.total_assigned)}
+                  description="Total assigned tasks"
+                />
+
+                <StatCard
+                  title="Completed Tasks"
+                  value={String(personalReport.tasks.completed)}
+                  description={`${personalReport.tasks.completion_rate}% completion rate`}
+                />
+
+                <StatCard
+                  title="In Progress Tasks"
+                  value={String(personalReport.tasks.in_progress)}
+                  description="Tasks currently in progress"
+                />
+
+                <StatCard
+                  title="Pending Tasks"
+                  value={String(personalReport.tasks.pending)}
+                  description="Tasks currently pending"
+                />
+
+                <StatCard
+                  title="Overdue Tasks"
+                  value={String(personalReport.tasks.overdue)}
+                  description="Tasks past their deadline"
+                />
+
+                <StatCard
+                  title="Meeting Attendance"
+                  value={`${personalReport.meetings.attendance_rate}%`}
+                  description={`${personalReport.meetings.attended} attended out of ${personalReport.meetings.total_invited} meetings`}
+                />
+
+                <StatCard
+                  title="Uploaded Files"
+                  value={String(personalReport.files.uploaded_count)}
+                  description={personalReport.files.formatted_size}
+                />
+
+                <StatCard
+                  title="Productivity Score"
+                  value={String(personalReport.productivity.score)}
+                  description={personalReport.productivity.performance_level}
+                />
+
+                <StatCard
+                  title="On-time Completion"
+                  value={`${personalReport.tasks.on_time_rate}%`}
+                  description="Tasks completed on time"
+                />
+              </section>
+            )}
+          </ReportSection>
+        </div>
+      </main>
+    );
+  }
+
+  // No reports permission
+  if (!canViewProjectReports && !canGenerateReports) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#F5F7FA] p-5">
+        <p className="text-center text-gray-600">
+          You don't have permission to access this page.
+        </p>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#F5F7FA] px-1 py-4 sm:px-6 lg:px-8 lg:py-8">
       <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-5">
 
-        {/* Statistics Cards */}
-        <section className="grid grid-cols-3 gap-2 sm:gap-5">
+        {/* Administrator: All Statistics */}
+        {canViewAllReports && (
+          <section className="grid grid-cols-3 gap-2 sm:gap-5">
 
-          <ReportSection
-            isLoading={tasksLoading}
-            isError={tasksError || !tasks}
-            error={tasksErrorMessage}
-            onRetry={() => {
-              void refetchTasks();
-            }}
-          >
-            <StatCard
-              title="Task Completion Rate"
-              value={`${tasks?.summary.completion_rate ?? 0}%`}
-              description={`${tasks?.summary.completed_tasks ?? 0} completed tasks`}
-            />
-          </ReportSection>
+            <ReportSection
+              isLoading={tasksLoading}
+              isError={tasksError || !tasks}
+              error={tasksErrorMessage}
+              onRetry={() => {
+                void refetchTasks();
+              }}
+            >
+              {tasks && (
+                <StatCard
+                  title="Total Tasks"
+                  value={String(tasks.summary.total_tasks)}
+                  description="Total tasks in the system"
+                />
+              )}
+            </ReportSection>
 
-          <ReportSection
-            isLoading={projectsLoading}
-            isError={projectsError || !projects}
-            error={projectsErrorMessage}
-            onRetry={() => {
-              void refetchProjects();
-            }}
-          >
-            <StatCard
-              title="Projects Completion Rate"
-              value={`${projects?.summary.average_completion_rate ?? 0}%`}
-              description={`${projects?.summary.total_projects ?? 0} total projects`}
-            />
-          </ReportSection>
+            <ReportSection
+              isLoading={projectsLoading}
+              isError={projectsError || !projects}
+              error={projectsErrorMessage}
+              onRetry={() => {
+                void refetchProjects();
+              }}
+            >
+              {projects && (
+                <StatCard
+                  title="Total Projects"
+                  value={String(projects.summary.total_projects)}
+                  description="Total projects in the system"
+                />
+              )}
+            </ReportSection>
 
-          <ReportSection
-            isLoading={teamsLoading}
-            isError={teamsError || !teams}
-            error={teamsErrorMessage}
-            onRetry={() => {
-              void refetchTeams();
-            }}
-          >
-            <StatCard
-              title="Total Team Members"
-              value={String(teams?.summary.total_members ?? 0)}
-              description={`${teams?.summary.total_teams ?? 0} teams`}
-            />
-          </ReportSection>
+            <ReportSection
+              isLoading={teamsLoading}
+              isError={teamsError || !teams}
+              error={teamsErrorMessage}
+              onRetry={() => {
+                void refetchTeams();
+              }}
+            >
+              {teams && (
+                <StatCard
+                  title="Total Teams"
+                  value={String(teams.summary.total_teams)}
+                  description="Total teams in the system"
+                />
+              )}
+            </ReportSection>
 
-        </section>
+          </section>
+        )}
 
-        {/* Charts and Report Form */}
+        {/* Original Charts and Report Form */}
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
 
-          <ReportSection
-            isLoading={tasksLoading}
-            isError={tasksError || !tasks}
-            error={tasksErrorMessage}
-            onRetry={() => {
-              void refetchTasks();
-            }}
-          >
-            <TaskCompletionChart
-  data={
-    tasks?.by_status ?? {
-      Pending: 0,
-      "In Progress": 0,
-      "In Review": 0,
-      Completed: 0,
-    }
-  }
-/>
-          </ReportSection>
+          {/* Tasks Chart: Administrator */}
+          {canViewAllReports && (
+            <ReportSection
+              isLoading={tasksLoading}
+              isError={tasksError || !tasks}
+              error={tasksErrorMessage}
+              onRetry={() => {
+                void refetchTasks();
+              }}
+            >
+              {tasks && (
+                <TaskCompletionChart data={tasks.by_status} />
+              )}
+            </ReportSection>
+          )}
 
-          <ReportSection
-            isLoading={projectsLoading}
-            isError={projectsError || !projects}
-            error={projectsErrorMessage}
-            onRetry={() => {
-              void refetchProjects();
-            }}
-          >
-          <ProjectsProgressChart
-  data={projects?.projects ?? []}
-/>
-          </ReportSection>
+          {/* Projects Chart: Administrator and Project Manager */}
+          {canViewProjectReports && (
+            <ReportSection
+              isLoading={projectsLoading}
+              isError={projectsError || !projects}
+              error={projectsErrorMessage}
+              onRetry={() => {
+                void refetchProjects();
+              }}
+            >
+              {projects && (
+                <ProjectsProgressChart data={projects.projects} />
+              )}
+            </ReportSection>
+          )}
 
-          <ReportSection
-            isLoading={teamsLoading}
-            isError={teamsError || !teams}
-            error={teamsErrorMessage}
-            onRetry={() => {
-              void refetchTeams();
-            }}
-          >
-         <WorkerActivityChart
-  data={teams?.teams ?? []}
-/>
-          </ReportSection>
+          {/* Teams Chart: Administrator */}
+          {canViewAllReports && (
+            <ReportSection
+              isLoading={teamsLoading}
+              isError={teamsError || !teams}
+              error={teamsErrorMessage}
+              onRetry={() => {
+                void refetchTeams();
+              }}
+            >
+              {teams && (
+                <WorkerActivityChart data={teams.teams} />
+              )}
+            </ReportSection>
+          )}
 
-          <ReportForm />
+          {/* Report Form: Administrator and Project Manager */}
+          {canGenerateReports && <ReportForm />}
 
         </section>
-              </div>
+      </div>
     </main>
   );
 };

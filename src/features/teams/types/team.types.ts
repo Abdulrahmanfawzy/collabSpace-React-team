@@ -8,6 +8,8 @@ export interface TeamMemberProgress {
   isLeader?: boolean
   tasksDone: number
   tasksTotal: number
+  progress: number
+  tasksRatio: string
 }
 
 export interface Team {

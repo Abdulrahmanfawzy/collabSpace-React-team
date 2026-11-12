@@ -14,10 +14,10 @@ const MeetingInfo = ({id} : props) => {
 
   const meeting = data?.data;
 
-  if (isLoading) return <div className="w-188 mt-11 ml-16 animate-pulse h-96 bg-muted rounded-4xl " />;
+  if (isLoading) return <div className="mt-11  animate-pulse h-96 bg-muted rounded-4xl " />;
 
   return (
-    <section className="mt-11 ml-16 mb-14">
+    <section className="mt-11  mb-14">
       <div className="flex flex-col gap-4">
         <Breadcrumb title={meeting?.title} />
         <h1 className="font-semibold text-h4">{meeting?.title}</h1>

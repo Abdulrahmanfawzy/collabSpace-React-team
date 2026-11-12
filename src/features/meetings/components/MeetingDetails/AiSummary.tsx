@@ -5,39 +5,73 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import NotesTab from "./NotesTab";
 import CommentsTab from "./CommentTab";
+import { getStoredUser } from "@/lib/auth";
+import type { UserRole } from "@/features/auth/constants/permissions";
+import { toast } from "sonner";
 
 type Tab = "summary" | "note" | "comments";
 
 type props = {
-  id: string | undefined
-}
+  id: string | undefined;
+};
 
-const AiSummary = ({id} : props) => {
-  
+const AiSummary = ({ id }: props) => {
   const meetingId = Number(id);
 
   const { data, isLoading, isError } = useGetMeetingDetails(meetingId);
-
-  const { mutate: generateSummary, isPending: isGenerating } = useGenerateMeetingSummary(meetingId);
-
-  const { mutate: createTasks, isPending: isCreatingTasks } = useCreateTasksFromSummary(meetingId);
+  const { mutate: generateSummary, isPending: isGenerating } =
+    useGenerateMeetingSummary(meetingId);
+  const { mutate: createTasks, isPending: isCreatingTasks } =
+    useCreateTasksFromSummary(meetingId);
 
   const [activeTab, setActiveTab] = useState<Tab>("summary");
   const [transcript, setTranscript] = useState("");
 
   const summary = data?.data?.summary;
 
+  // Permissions
+  const currentUser = getStoredUser() as {
+    id: number;
+    roles?: UserRole[];
+  } | null;
+
+  const role = currentUser?.roles?.[0];
+  const canGenerateSummary = role === "Administrator" || role === "Project Manager";
+
   const handleGenerate = () => {
-    if (!transcript.trim()) return;
-    generateSummary({ transcript });
+    if (!transcript.trim()) {
+      toast.error("Please enter a transcript first");
+      return;
+    }
+
+    generateSummary(
+      { transcript },
+      {
+        onSuccess: (response) => {
+          toast.success(response.message || "Summary generated successfully");
+        },
+        onError: () => {
+          toast.error("Failed to generate summary");
+        },
+      },
+    );
   };
 
   const handleCreateTasks = () => {
-    createTasks();
+    createTasks(undefined, {
+    onSuccess: (response) => {
+      toast.success(response.message || "Tasks created successfully");
+    },
+    onError: () => {
+      toast.error("Failed to create tasks");
+    },
+  });
   };
 
   if (isLoading) {
-    return <div className="w-188 h-95 animate-pulse bg-background-secondary rounded-4xl" />;
+    return (
+      <div className="w-188 h-95 animate-pulse bg-background-secondary rounded-4xl" />
+    );
   }
 
   if (isError) {
@@ -46,6 +80,7 @@ const AiSummary = ({id} : props) => {
 
   return (
     <div className="w-188">
+
       {/* Tabs */}
       <div className="w-78 flex">
         <span
@@ -89,32 +124,34 @@ const AiSummary = ({id} : props) => {
                 AI Generate Summary
               </h3>
 
-              <div className="flex gap-2">
-                {!summary && (
-                  <Button
-                    size="sm"
-                    onClick={handleGenerate}
-                    disabled={isGenerating || !transcript.trim()}
-                  >
-                    {isGenerating ? "Generating..." : "Generate"}
-                  </Button>
-                )}
+              {canGenerateSummary && (
+                <div className="flex gap-2">
+                  {!summary && (
+                    <Button
+                      size="sm"
+                      onClick={handleGenerate}
+                      disabled={isGenerating || !transcript.trim()}
+                    >
+                      {isGenerating ? "Generating..." : "Generate"}
+                    </Button>
+                  )}
 
-                {summary && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleCreateTasks}
-                    disabled={isCreatingTasks}
-                  >
-                    {isCreatingTasks ? "Creating..." : "Create Tasks"}
-                  </Button>
-                )}
-              </div>
+                  {summary && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={handleCreateTasks}
+                      disabled={isCreatingTasks}
+                    >
+                      {isCreatingTasks ? "Creating..." : "Create Tasks"}
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Generate input (لو مفيش summary) */}
-            {!summary && (
+            {/* Generate input - amdin and pr*/}
+            {canGenerateSummary && !summary && (
               <textarea
                 value={transcript}
                 onChange={(e) => setTranscript(e.target.value)}
@@ -126,7 +163,6 @@ const AiSummary = ({id} : props) => {
             {/* Summary Content */}
             {summary && (
               <div className="w-full flex flex-col gap-6">
-                {/* Summary Text */}
                 <div>
                   <span className="font-medium text-h6">Summary</span>
                   <p className="mt-2 font-normal text-body leading-5">
@@ -134,7 +170,6 @@ const AiSummary = ({id} : props) => {
                   </p>
                 </div>
 
-                {/* Decisions */}
                 {summary.decisions_made?.length > 0 && (
                   <div>
                     <span className="font-medium text-h6">Decisions Made</span>
@@ -148,7 +183,6 @@ const AiSummary = ({id} : props) => {
                   </div>
                 )}
 
-                {/* Action Items */}
                 {summary.action_items?.length > 0 && (
                   <div>
                     <span className="font-medium text-h6">Action Items</span>
@@ -168,7 +202,6 @@ const AiSummary = ({id} : props) => {
                   </div>
                 )}
 
-                {/* Risks */}
                 {summary.risks?.length > 0 && (
                   <div>
                     <span className="font-medium text-h6">Risks</span>
@@ -182,7 +215,6 @@ const AiSummary = ({id} : props) => {
                   </div>
                 )}
 
-                {/* Next Steps */}
                 {summary.next_steps?.length > 0 && (
                   <div>
                     <span className="font-medium text-h6">Next Steps</span>
@@ -198,21 +230,23 @@ const AiSummary = ({id} : props) => {
               </div>
             )}
 
-            {!summary && !transcript && (
+            {!summary && canGenerateSummary && !transcript && (
               <p className="text-muted-foreground text-small">
                 No summary yet. Paste a transcript and generate one.
+              </p>
+            )}
+
+            {!summary && !canGenerateSummary && (
+              <p className="text-muted-foreground text-small">
+                No summary available yet.
               </p>
             )}
           </>
         )}
 
-        {activeTab === "note" && (
-          <NotesTab meetingId={meetingId} />
-        )}
+        {activeTab === "note" && <NotesTab meetingId={meetingId} />}
 
-        {activeTab === "comments" && (
-          <CommentsTab meetingId={meetingId} />
-        )}
+        {activeTab === "comments" && <CommentsTab meetingId={meetingId} />}
       </div>
     </div>
   );

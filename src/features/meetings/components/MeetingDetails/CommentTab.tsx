@@ -7,57 +7,96 @@ import {
   useDeleteMeetingComment,
 } from "../../hooks/useMeetingComments";
 import { Pencil, Trash2 } from "lucide-react";
+import { getStoredUser } from "@/lib/auth";
+import { type UserRole } from "@/features/auth/constants/permissions";
+import { toast } from "sonner";
 
 type CommentsTabProps = {
   meetingId: number;
 };
 
 const CommentsTab = ({ meetingId }: CommentsTabProps) => {
+
   const { data, isLoading } = useGetMeetingComments(meetingId);
-  const { mutate: createComment, isPending: isCreating } =  useCreateMeetingComment(meetingId);
-  const { mutate: updateComment, isPending: isUpdating } = useUpdateMeetingComment(meetingId);
-  const { mutate: deleteComment, isPending: isDeleting } = useDeleteMeetingComment(meetingId);
+
+  const { mutate: createComment, isPending: isCreating } = useCreateMeetingComment(meetingId);
+  const { mutate: updateComment, isPending: isUpdating } =  useUpdateMeetingComment(meetingId);
+  const { mutate: deleteComment, isPending: isDeleting } =  useDeleteMeetingComment(meetingId);
 
   const [body, setBody] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editBody, setEditBody] = useState("");
 
-const comments = data?.data?.data ?? [];
-  const handleCreate = () => {
-    if (!body.trim()) return;
+  const comments = data?.data?.data ?? [];
 
-    createComment(
-      { body },
-      {
-        onSuccess: () => setBody(""),
-      }
-    );
+  const currentUser = getStoredUser() as {
+    id: number;
+    roles?: UserRole[];
+  } | null;
+
+  const role = currentUser?.roles?.[0];
+
+  const isAdminOrPM =  role === "Administrator" || role === "Project Manager";
+
+
+  const canModifyComment = (comment: { author?: { id?: number } }) => {
+    if (isAdminOrPM) return true;
+
+    return currentUser?.id === comment.author?.id;
   };
 
-  const handleStartEdit = (comment: { id: number; body: string }) => {
-    setEditingId(comment.id);
-    setEditBody(comment.body);
-  };
+const handleCreate = () => {
+  if (!body.trim()) return;
 
-  const handleUpdate = (commentId: number) => {
-    if (!editBody.trim()) return;
-
-    updateComment(
-      {
-        commentId,
-        payload: { body: editBody },
+  createComment(
+    { body },
+    {
+      onSuccess: (response) => {
+        setBody("");
+        toast.success(response.message || "Comment added successfully");
       },
-      {
-        onSuccess: () => {
-          setEditingId(null);
-          setEditBody("");
-        },
-      }
-    );
-  };
+      onError: () => {
+        toast.error("Failed to add comment");
+      },
+    }
+  );
+};
+
+const handleStartEdit = (comment: { id: number; body: string }) => {
+  setEditingId(comment.id);
+  setEditBody(comment.body);
+};
+
+const handleUpdate = (commentId: number) => {
+  if (!editBody.trim()) return;
+
+  updateComment(
+    {
+      commentId,
+      payload: { body: editBody },
+    },
+    {
+      onSuccess: (response) => {
+        setEditingId(null);
+        setEditBody("");
+        toast.success(response.message || "Comment updated successfully");
+      },
+      onError: () => {
+        toast.error("Failed to update comment");
+      },
+    }
+  );
+};
 
   const handleDelete = (commentId: number) => {
-    deleteComment(commentId);
+    deleteComment(commentId, {
+      onSuccess: (response) => {
+        toast.success(response.message || "Comment deleted successfully");
+      },
+      onError: () => {
+        toast.error("Failed to deleted comment");
+      },
+    });
   };
 
   if (isLoading) {
@@ -67,7 +106,7 @@ const comments = data?.data?.data ?? [];
   return (
     <div className="flex flex-col gap-4">
       {/* Add Comment */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <input
           value={body}
           onChange={(e) => setBody(e.target.value)}
@@ -91,9 +130,8 @@ const comments = data?.data?.data ?? [];
 
       {/* Comments List */}
       <div className="flex flex-col gap-3">
-        {comments.length === 0 && (
-          <p className="text-muted-foreground text-small">No comments yet.</p>
-        )}
+        
+        {comments.length === 0 &&  <p className="text-muted-foreground text-small">No comments yet.</p> }
 
         {comments?.map((comment) => (
           <div
@@ -139,31 +177,30 @@ const comments = data?.data?.data ?? [];
                   )}
                 </div>
 
-                <div className="flex gap-2 shrink-0">
+                {canModifyComment(comment) && (
+                  <div className="flex gap-2 shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-6"
+                      aria-label="Edit comment"
+                      onClick={() => handleStartEdit(comment)}
+                    >
+                      <Pencil className="size-3.5" />
+                    </Button>
 
-
-                              
-                <Button
-                variant="ghost"
-                size="icon"
-                className="size-6"
-                aria-label="Edit meeting"
-                onClick={() => handleStartEdit(comment)}
-                >
-                    <Pencil className="size-3.5" />
-                </Button>
-
-                <Button
-                variant="ghost"
-                size="icon"
-                className="size-6"
-                aria-label="Edit meeting"
-                onClick={() => handleDelete(comment.id)}
-                disabled={isDeleting}
-                >
-                    <Trash2 className="size-3.5" />
-                </Button>
-            </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-6 text-destructive"
+                      aria-label="Delete comment"
+                      onClick={() => handleDelete(comment.id)}
+                      disabled={isDeleting}
+                    >
+                      <Trash2 className="size-3.5" />
+                    </Button>
+                  </div>
+                )}
               </>
             )}
           </div>

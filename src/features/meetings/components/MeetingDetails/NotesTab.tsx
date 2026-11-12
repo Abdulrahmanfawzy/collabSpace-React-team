@@ -7,7 +7,7 @@ import {
   useDeleteMeetingNote,
 } from "../../hooks/useMeetingNotes";
 import NoteItem from "./NoteItem";
-// استورد أيقونات التعديل والحذف اللي بتستخدمها في المشروع
+import { toast } from "sonner";
 
 type NotesTabProps = {
   meetingId: number;
@@ -30,7 +30,14 @@ const NotesTab = ({ meetingId }: NotesTabProps) => {
     createNote(
       { content },
       {
-        onSuccess: () => setContent(""),
+        onSuccess: (response) => {
+          setContent("")
+          toast.success(response.message || "Note Created successfully");
+        },
+        onError: () => {
+          toast.error("Failed to create note");
+        },
+
       }
     );
   };
@@ -45,16 +52,28 @@ const NotesTab = ({ meetingId }: NotesTabProps) => {
     updateNote(
       { noteId, payload: { content: editContent } },
       {
-        onSuccess: () => {
+        onSuccess: (response) => {
           setEditingId(null);
           setEditContent("");
+          toast.success(response.message || "Note Updated successfully");
         },
+        onError: () => {
+          toast.error("Failed to update note");
+        }
+        
       }
     );
   };
 
   const handleDelete = (noteId: number) => {
-    deleteNote(noteId);
+    deleteNote(noteId , {
+        onSuccess: (response) => {
+          toast.success(response.message || "Note Deleted successfully");
+        },
+        onError: () => {
+          toast.error("Failed to delete note");
+        }
+    });
   };
 
   if (isLoading) {

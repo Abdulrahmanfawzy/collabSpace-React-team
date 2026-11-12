@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import TranscriptsHeader from "./TranscriptsHeader";
 import TranscriptCard from "./TranscriptCard";
 import SearchInput from "../../../../components/common/SearchInput";
@@ -8,6 +9,7 @@ import {
 } from "../../hooks/useMeetingComments";
 import type { MeetingComment } from "../../types/meetings.types";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 type TranscriptsProps = {
   id: string | undefined;
@@ -21,7 +23,6 @@ const Transcripts = ({ id }: TranscriptsProps) => {
   const { mutate: updateComment } = useUpdateMeetingComment(meetingId);
   const { mutate: deleteComment } = useDeleteMeetingComment(meetingId);
 
-  // جربنا نغطي أكتر من شكل response محتمل
   const comments = data?.data?.data ?? [];
 
     useEffect(()=> {
@@ -32,11 +33,25 @@ const Transcripts = ({ id }: TranscriptsProps) => {
     updateComment({
       commentId,
       payload: { body: newText },
+    }, {
+      onSuccess : (response)=> {
+        toast.success(response.message || "Comment Updated successfully")
+      },
+      onError : (response)=> {
+        toast.error(response.message || "Failed to updated comment ")
+      }
     });
   };
 
   const handleDelete = (commentId: number) => {
-    deleteComment(commentId);
+    deleteComment(commentId , {
+      onSuccess : (response)=> {
+        toast.success(response.message || "Comment Deleted successfully")
+      },
+      onError : (response)=> {
+        toast.error(response.message || "Failed to deleted comment ")
+      }
+    });
   };
 
   if (!meetingId) {
@@ -70,7 +85,7 @@ const Transcripts = ({ id }: TranscriptsProps) => {
   }
 
   return (
-    <section className="bg-white rounded-4xl px-4 py-17 flex flex-col gap-5 ml-8 mr-13 mt-10">
+    <section className="bg-white rounded-4xl px-4 py-17 flex flex-col gap-5 ml-8 mr-13 mt-10 grow">
       <TranscriptsHeader />
       <SearchInput
         placeholder="Search Transcript"

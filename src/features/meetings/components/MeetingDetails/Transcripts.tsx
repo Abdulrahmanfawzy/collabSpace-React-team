@@ -1,29 +1,125 @@
-import SearchInput from "@/components/common/SearchInput"
-import TranscriptsHeader from "./TranscriptsHeader"
-import TranscriptCard from "./TranscriptCard"
+/* eslint-disable react-hooks/exhaustive-deps */
+import TranscriptsHeader from "./TranscriptsHeader";
+import TranscriptCard from "./TranscriptCard";
+import SearchInput from "../../../../components/common/SearchInput";
+import {
+  useGetMeetingComments,
+  useUpdateMeetingComment,
+  useDeleteMeetingComment,
+} from "../../hooks/useMeetingComments";
+import type { MeetingComment } from "../../types/meetings.types";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
-const Transcripts = () => {
+type TranscriptsProps = {
+  id: string | undefined;
+};
+
+const Transcripts = ({ id }: TranscriptsProps) => {
+  const meetingId = Number(id);
+
+  const { data, isLoading, isError } = useGetMeetingComments(meetingId);
   
-  const transcripts = [
-    {time : "00:01" , name : "Mohanad Wahib" , text:"Good morning everyone. Thanks for joining on time. Today we’ll focus on reviewing the latest design updates and aligning on next steps."},
-    {time : "00:40" , name : "Ahmed Hassan" , text:"Morning. I went through the new homepage design, and overall it looks cleaner, but I think we still have some usability issues to address."},
-    {time : "01:23" , name : "Omar Khaled" , text:"I agree. The layout is better, but the call-to-action isn’t very clear, especially for first-time users."},
-    {time : "02:01" , name : "Mohanad Wahib" , text:"From a UX perspective, the sign-up flow also feels a bit long. Users might drop off before completing the process."},
-    {time : "04:48" , name : "Mahmoud Ashraf" , text:"That’s a good point. Do you think we should reduce the number of required fields in the first step?"},
-    {time : "06:15" , name : "Ahmed Hassan" , text:"Good morning everyone. Let’s begin today’s meeting by reviewing the project timeline and assigning tasks for the next phase."},
-  ]
+  const { mutate: updateComment } = useUpdateMeetingComment(meetingId);
+  const { mutate: deleteComment } = useDeleteMeetingComment(meetingId);
 
-  return (
-    <section className=" bg-white rounded-4xl px-4 py-17 flex flex-col gap-5 ml-8 mr-13 mt-10">
+  const comments = data?.data?.data ?? [];
+
+    useEffect(()=> {
+      console.log(comments)
+    } , [comments])
+
+  const handleEdit = (commentId: number, newText: string) => {
+    updateComment({
+      commentId,
+      payload: { body: newText },
+    }, {
+      onSuccess : (response)=> {
+        toast.success(response.message || "Comment Updated successfully")
+      },
+      onError : (response)=> {
+        toast.error(response.message || "Failed to updated comment ")
+      }
+    });
+  };
+
+  const handleDelete = (commentId: number) => {
+    deleteComment(commentId , {
+      onSuccess : (response)=> {
+        toast.success(response.message || "Comment Deleted successfully")
+      },
+      onError : (response)=> {
+        toast.error(response.message || "Failed to deleted comment ")
+      }
+    });
+  };
+
+  if (!meetingId) {
+    return null;
+  }
+
+  if (isLoading) {
+    return (
+      <section className="bg-white rounded-4xl px-4 py-17 flex flex-col gap-5 ml-8 mr-13 mt-10">
         <TranscriptsHeader />
-        <SearchInput placeholder="Search Transcript" width={"full"} style={"bg-background-secondary pr-4 pl-11"} iconStyle="left-4" paramKey="meetingSearch"/>
+        <div className="h-12 animate-pulse bg-background-secondary rounded-xl" />
         <div className="flex flex-col gap-5">
-          {transcripts?.map(t => (
-             <TranscriptCard key={t.time} time={t.time} name={t.name} text={t.text}/>
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="h-24 animate-pulse bg-background-secondary rounded-xl"
+            />
           ))}
         </div>
-    </section>
-  )
-}
+      </section>
+    );
+  }
 
-export default Transcripts
+  if (isError) {
+    return (
+      <section className="bg-white rounded-4xl px-4 py-17 flex flex-col gap-5 ml-8 mr-13 mt-10">
+        <TranscriptsHeader />
+        <p className="text-destructive text-small">Failed to load transcripts</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="bg-white rounded-4xl px-4 py-17 flex flex-col gap-5 ml-8 mr-13 mt-10 grow">
+      <TranscriptsHeader />
+      <SearchInput
+        placeholder="Search Transcript"
+        width={"full"}
+        style={"bg-background-secondary pr-4 pl-11"}
+        iconStyle="left-4"
+        paramKey="meetingSearch"
+      />
+
+      <div className="flex flex-col gap-5">
+        {comments.length === 0 ? (
+          <p className="text-muted-foreground text-small text-center py-8">
+            No transcripts yet.
+          </p>
+        ) : (
+          comments.map((comment : MeetingComment) => (
+            <TranscriptCard
+              key={comment.id}
+              id={comment.id}
+              name={comment.author?.name || "Unknown"}
+              text={comment.body}
+              meetingId={meetingId}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              canEdit={comment.can_edit}
+              canDelete={comment.can_delete}
+              createdAt={comment.created_at}
+            />
+          ))
+        )
+        }
+      </div>
+    </section>
+  );
+};
+
+export default Transcripts;

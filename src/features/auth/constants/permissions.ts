@@ -34,6 +34,19 @@ export const ROLE_PERMISSIONS = {
     "meetings.delete",
     "meetings.schedule",
     "meetings.attend",
+    "meetings.generate-summary",
+
+    // Meeting Notes
+    "notes.view",
+    "notes.create",
+    "notes.update",
+    "notes.delete",
+
+    // Meeting Comments
+    "comments.view",
+    "comments.create",
+    "comments.update",
+    "comments.delete",
 
     // Reports & Analytics
     "reports.view-all",
@@ -84,6 +97,19 @@ export const ROLE_PERMISSIONS = {
     "meetings.delete",
     "meetings.schedule",
     "meetings.attend",
+    "meetings.generate-summary",
+
+    // Meeting Notes
+    "notes.view",
+    "notes.create",
+    "notes.update",
+    "notes.delete",
+
+    // Meeting Comments
+    "comments.view",
+    "comments.create",
+    "comments.update",
+    "comments.delete",
 
     // Reports & Analytics
     "reports.generate",
@@ -108,6 +134,18 @@ export const ROLE_PERMISSIONS = {
     // Meetings
     "meetings.view",
     "meetings.attend",
+
+    // Meeting Notes
+    "notes.view",
+    "notes.create",
+    "notes.update",
+    "notes.delete",
+
+    // Meeting Comments
+    "comments.view",
+    "comments.create",
+    "comments.update",
+    "comments.delete",
 
     // Chat
     "chat.participate",

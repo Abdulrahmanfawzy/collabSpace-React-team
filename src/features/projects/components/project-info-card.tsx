@@ -34,7 +34,7 @@ export function ProjectInfoCard({ project }: ProjectInfoCardProps) {
         <CardTitle className="text-h6 font-semibold">Product Details</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        <InfoItem icon={Briefcase} label="Project Type" value={project.projectType} />
+          <InfoItem icon={Briefcase} label="Status" value={project.status}  />
         <InfoItem icon={Calendar} label="Start Date" value={project.startDate} />
         <InfoItem icon={Clock} label="Deadline" value={project.deadline} />
         <InfoItem icon={CircleAlert} label="Priority" value={project.priority} />

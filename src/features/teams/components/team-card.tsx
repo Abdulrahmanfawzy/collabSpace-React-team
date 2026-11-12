@@ -11,7 +11,7 @@ const headerStyles: Record<TeamColor, string> = {
   gray: "bg-secondary-gray-50 text-secondary-gray-500",
 }
 
-const pad = (n: number) => String(n).padStart(2, "0")
+
 
 interface TeamCardProps {
   team: Team
@@ -51,11 +51,11 @@ export function TeamCard({ team }: TeamCardProps) {
                 <span className="truncate text-small">{m.name}</span>
                 <span className="text-caption text-secondary-gray-300">{m.role}</span>
               </div>
-              <Progress value={(m.tasksDone / m.tasksTotal) * 100} className="h-1" />
+              <Progress value={m.progress} className="h-1" />
             </div>
 
             <span className="shrink-0 text-caption">
-              {pad(m.tasksDone)}/{m.tasksTotal}
+            {m.tasksDone}
             </span>
           </div>
         ))}

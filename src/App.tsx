@@ -30,6 +30,10 @@ function RootRedirect() {
   return <Navigate to={isAuthenticated() ? "/dashboard" : "/sign-in"} replace />;
 }
 
+function RootRedirect() {
+  return <Navigate to={isAuthenticated() ? "/dashboard" : "/sign-in"} replace />;
+}
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -113,6 +117,8 @@ const router = createBrowserRouter([
   path: "/forbidden",
   element: <ForbiddenPage />,
 }
+    ],
+      },
     ],
       },
     ],

@@ -33,10 +33,10 @@ export interface MessagesPage {
 }
 
 // message.api.ts
-export async function getProjectMessages(projectId: number | string, perPage = 20) {
+export async function getProjectMessages(projectId: number | string,   page = 1, perPage = 20) {
   try {
-    const res = await api.get(`/projects/${projectId}/messages`, {
-      params: { per_page: perPage},
+    const res = await api.get(`/api/v1/projects/${projectId}/messages`, {
+      params: { per_page: perPage, page},
     });
     return res.data.data as MessagesPage;
   } catch (err: any) {
@@ -47,3 +47,19 @@ export async function getProjectMessages(projectId: number | string, perPage = 2
     throw err;
   }
 }
+export const sendProjectMessage = async (projectId: string, message: string) => {
+  const res = await api.post<{ success: boolean; data: ApiMessage }>(
+    `/api/v1/projects/${projectId}/messages`,
+    { message }
+  );
+  console.log(res.data.data)
+  return res.data.data;
+};
+
+export const editMessage = async (messageId: number, message: string) => {
+  const res = await api.patch<{ success: boolean; data: ApiMessage }>(
+    `/api/v1/messages/${messageId}`,
+    { message }
+  );
+  return res.data.data;
+};

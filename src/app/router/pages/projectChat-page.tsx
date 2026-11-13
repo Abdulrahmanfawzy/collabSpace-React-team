@@ -21,9 +21,11 @@ export default function ProjectChatPage() {
   const [openMessage, setOpenMessage] = useState<Message | null>(null);
 
   const project = projects.find((p) => String(p.id) === projectId);
-  const { data, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
+  const { data, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage ,error } =
     useProjectMessages(project ? String(project.id) : undefined);
-
+console.log("param projectId:", projectId, typeof projectId);
+console.log("project ids:", projects.map((p) => p.id));
+console.log("matched project:", project);
   const messages = useMemo<Message[]>(() => {
     const all = data?.pages.flatMap((p) => p.data) ?? [];
     return all
@@ -34,7 +36,7 @@ export default function ProjectChatPage() {
 
   if (!project) return <Navigate to="/chats/projects" replace />;
   if (isLoading) return <div className="p-4">Loading messages…</div>;
-  if (isError) return <div className="p-4">Failed to load messages.</div>;
+  if (isError) return <div className="p-4">{error.message}</div>;
 
   return (
     <>

@@ -32,11 +32,18 @@ export interface MessagesPage {
   meta: { current_page: number; last_page: number; per_page: number; total: number };
 }
 
-export async function getProjectMessages(projectId: number | string, page = 1, perPage = 20) {
-  const res = await api.get(`/projects/${projectId}/messages`, {
-    params: { per_page: perPage, page },
-  });
-  console.log("data")
-  console.log(res.data.data )
-  return res.data.data as MessagesPage;
+// message.api.ts
+export async function getProjectMessages(projectId: number | string, perPage = 20) {
+  try {
+    const res = await api.get(`/projects/${projectId}/messages`, {
+      params: { per_page: perPage},
+    });
+    return res.data.data as MessagesPage;
+  } catch (err: any) {
+    console.log(`/projects/${projectId}/messages`);
+    console.log("status:", err.response?.status);
+    console.log("body:", err.response?.data);
+    console.log("auth header sent:", err.config?.headers?.Authorization ? "yes" : "NO");
+    throw err;
+  }
 }

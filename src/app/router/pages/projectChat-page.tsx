@@ -1,40 +1,55 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Navigate, useOutletContext, useParams } from "react-router-dom";
 import ChatConversation, { type Message } from "@/components/chat/chat-conversation";
 import EditChatModel from "@/components/chat/edit-chat-model";
 import type { ChatsOutletContext } from "@/components/layout/chats-layout";
+import { useProjectMessages } from "@/components/chat/useProjectMessages";
+import type { ApiMessage } from "@/components/chat/message.api";
 
-const START: Record<string, Message[]> = {
-  "1-Public Channel": [
-    { id: 1, author: "Mohamed Ahmed", text: "Yes, we can do this are" },
-    { id: 2, author: "Salah Ali", text: "You should do it early" },
-    { id: 3, author: "Mohamed Ahmed", text: "I edit it and now you can see it", tag: "#Screen edit" },
-  ],
-};
+const toMessage = (m: ApiMessage): Message => ({
+
+  id: m.id,
+  author: m.sender.name,
+  text: m.message,
+  
+});
 
 export default function ProjectChatPage() {
+
   const { projectId } = useParams();
   const { channel, projects } = useOutletContext<ChatsOutletContext>();
-  const [all, setAll] = useState(START);
   const [openMessage, setOpenMessage] = useState<Message | null>(null);
 
   const project = projects.find((p) => String(p.id) === projectId);
-  if (!project) return <Navigate to="/chats/projects" replace />;
+  const { data, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useProjectMessages(project ? String(project.id) : undefined);
 
-  const key = `${project.id}-${channel}`;
+  const messages = useMemo<Message[]>(() => {
+    const all = data?.pages.flatMap((p) => p.data) ?? [];
+    return all
+      .slice()
+      .sort((a, b) => +new Date(a.created_at) - +new Date(b.created_at))
+      .map(toMessage);
+  }, [data]);
+
+  if (!project) return <Navigate to="/chats/projects" replace />;
+  if (isLoading) return <div className="p-4">Loading messages…</div>;
+  if (isError) return <div className="p-4">Failed to load messages.</div>;
 
   return (
     <>
+      {hasNextPage && (
+        <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+          {isFetchingNextPage ? "Loading…" : "Load older messages"}
+        </button>
+      )}
       <ChatConversation
         variant="project"
         title={channel}
-        messages={all[key] ?? []}
-        onSend={(text) =>
-          setAll((m) => ({
-            ...m,
-            [key]: [...(m[key] ?? []), { id: Date.now(), author: "Me", text, mine: true }],
-          }))
-        }
+        messages={messages}
+        onSend={(text) => {
+          // Send Message API comes next
+        }}
         onTagClick={setOpenMessage}
       />
       {openMessage?.tag && (
@@ -47,17 +62,3 @@ export default function ProjectChatPage() {
     </>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

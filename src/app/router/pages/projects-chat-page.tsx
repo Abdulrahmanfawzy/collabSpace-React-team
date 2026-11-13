@@ -58,6 +58,7 @@ function ChatItem({ chat, active, onSelect }: { chat: Chat; active: boolean; onS
 }
 
 export default function ProjectsChatsPage() {
+
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");

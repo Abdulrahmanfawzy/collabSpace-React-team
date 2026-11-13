@@ -25,10 +25,10 @@ import ProjectChatPage from "./app/router/pages/projectChat-page";
 import ProjectsChatsPage from "./app/router/pages/projects-chat-page";
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   element: <Navigate to="/sign-in" replace />,
-  // },
+  {
+    path: "/",
+    element: <Navigate to="/sign-in" replace />,
+  },
   {
     path: "/sign-in",
     element: <Login />,

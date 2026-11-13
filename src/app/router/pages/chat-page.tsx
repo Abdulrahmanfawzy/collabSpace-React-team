@@ -29,11 +29,11 @@ const START: Record<string, Message[]> = {
 };
 
 export default function PersonChatPage() {
-  const { personId } = useParams();
-  const persons = useOutletContext<ChatsOutletContext>();
+  const { id } = useParams();
+  const { persons } = useOutletContext<ChatsOutletContext>();
   const [all, setAll] = useState<Record<string, Message[]>>(START);
 
-  const person = persons.find((p) => String(p.id) === personId);
+  const person = persons.find((p) => String(p.id) === id);
   if (!person) return <Navigate to="/chats/inbox" replace />;
 
   const key = String(person.id);

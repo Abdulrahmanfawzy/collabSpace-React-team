@@ -12,27 +12,23 @@ import ReportsPage from "./features/reports/ReportsPage";
 import Login from "./app/router/pages/login";
 import Resgister from "./app/router/pages/register";
 import ForgotPasswordPage from "./app/router/pages/forgot-password";
-import VerifyOtpPage from "./app/router/pages/verify-otp";
-import ResetPasswordPage from "./app/router/pages/reset-password";
 import ProfilePage from "./app/router/pages/profile-page";
 import ProfileSettingsPage from "./app/router/pages/profile-settings-page";
 import MainLayout from "./components/layout/MainLayout";
-import { ProtectedRoute } from "./app/router/guards/ProtectedRoute";
-import { isAuthenticated } from "./lib/auth";
 import PersonChatPage from "./app/router/pages/chat-page";
 import CalendaPage from "./app/router/pages/CalendarPage";
 import MeetingDetailsPage from "./app/router/pages/MeetingDetailsPage";
 import Dashboard from "./app/router/pages/dashboard-page";
-
-function RootRedirect() {
-  return <Navigate to={isAuthenticated() ? "/dashboard" : "/sign-in"} replace />;
-}
+import SelectChat from "./app/router/pages/select-chat";
+import ChatsLayout from "./components/layout/chats-layout";
+import ProjectChatPage from "./app/router/pages/projectChat-page";
+import ProjectsChatsPage from "./app/router/pages/projects-chat-page";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootRedirect />,
-  },
+  // {
+  //   path: "/",
+  //   element: <Navigate to="/sign-in" replace />,
+  // },
   {
     path: "/sign-in",
     element: <Login />,
@@ -46,19 +42,8 @@ const router = createBrowserRouter([
     element: <ForgotPasswordPage />,
   },
   {
-    path: "/verify-otp",
-    element: <VerifyOtpPage />,
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPasswordPage />,
-  },
-  {
-    element: <ProtectedRoute />,
+    element: <MainLayout />,
     children: [
-      {
-        element: <MainLayout />,
-        children: [
       {
         path: "/dashboard",
         element: <Dashboard />,
@@ -87,10 +72,17 @@ const router = createBrowserRouter([
         path: "/meetings/:id",
         element: <MeetingDetailsPage />,
       },
-      {
-        path: "/chats",
-        element: <PersonChatPage />,
-      },
+    {
+  path: "/chats",
+  element: <ChatsLayout />,
+  children: [
+     { index: true, element: <SelectChat /> },
+    { path: "inbox", element: <SelectChat /> },
+    { path: "inbox/:id", element: <PersonChatPage /> },
+    { path: "projects", element: <SelectChat /> },
+    { path: "projects/:projectId", element: <ProjectChatPage /> },
+           
+    ]},
       {
         path: "/profile",
         element: <ProfilePage />,
@@ -98,8 +90,6 @@ const router = createBrowserRouter([
       {
         path: "/profile/settings",
         element: <ProfileSettingsPage />,
-      },
-    ],
       },
     ],
   },

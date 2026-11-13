@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { getToken } from "@/lib/auth";
-const VITE_API_URL="https://collabspace.huma-volve.com/ai/v1"
+const VITE_API_URL="https://collabspace.huma-volve.com"
 
 const api = axios.create({
   baseURL: VITE_API_URL,
